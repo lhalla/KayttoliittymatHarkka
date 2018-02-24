@@ -132,7 +132,7 @@ public class Server
 	synchronized boolean addNewUser(User newUser)
 	{
 		// If the user list doesn't contain a user with the same name, add it.
-		if (!users.contains(newUser))
+		if (!usernameTaken(newUser))
 		{
 			// Add the user.
 			users.add(newUser);
@@ -150,6 +150,22 @@ public class Server
 				users.remove(newUser);
 				return false;
 			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Checks if a username has already been taken.
+	 * @param user a potential new user.
+	 * @return true if the username has been taken.
+	 */
+	protected boolean usernameTaken(User user)
+	{
+		for (User u : users)
+		{
+			if (u.getUsername().equals(user.getUsername()))
+				return true;
 		}
 		
 		return false;

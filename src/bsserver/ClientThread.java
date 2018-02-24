@@ -29,7 +29,7 @@ public class ClientThread extends Thread
 	 */
 	public ClientThread(Server master, Socket socket, int id)
 	{
-		master.displayEvent("New ClientThread (" + id + ") started for connection from (" + socket.getInetAddress().toString() + ":" + socket.getPort() + ").");
+		master.displayEvent("New ClientThread (" + id + ") started for connection (" + socket.getInetAddress().toString() + ":" + socket.getPort() + ").");
 		this.master = master;
 		this.id = id;
 		this.socket = socket;
@@ -52,24 +52,7 @@ public class ClientThread extends Thread
 				{
 					user = (User) incobj;	// convert the incoming object into a User.
 					
-					// LOOP1: Go through all users to see if the name is taken.
-					for (User u : master.users)
-					{
-						// The username is already taken.
-						if (u.getUsername().equals(user))
-						{
-							// Send a negative response.
-							streamOut.writeBoolean(false);
-							streamOut.flush();
-							
-							// Set the user to null and break from LOOP1.
-							user = null;
-							break;
-						}
-					}
-					
-					// If the username wasn't taken, create a new user (NOT IMPLEMENTED YET).
-					if (user != null)
+					if (!master.usernameTaken(user))
 					{
 						// Try to add a new user.
 						boolean res = master.addNewUser(user);
@@ -80,10 +63,20 @@ public class ClientThread extends Thread
 						if (res)
 							break;
 					}
+					else
+					{
+						// Send a negative response.
+						streamOut.writeBoolean(false);
+						streamOut.flush();
+						
+						master.displayEvent("CT" + id + ": Attempt to create a new user '" + user.getUsername()
+							+ "' failed: Username already taken (" + ClientThread.getClientAddress(socket) + ").");
+					}
 				}
 				// If the client logs out or closes the login window, end the thread.
 				else if (incobj instanceof Logout)
 				{
+					master.displayEvent("CT" + id + ": Connection closed: LOGOUT.");
 					master.remove(id);
 					close();
 				}
@@ -93,9 +86,8 @@ public class ClientThread extends Thread
 					user = (User) incobj;	// convert the incoming object into a User.
 					
 					// Display a login attempt in the event log.
-					master.displayEvent("Incoming login attempt from user '" 
-							+ user.getUsername() + "' (" + socket.getInetAddress().toString() + ":" 
-							+ socket.getPort() + ").");
+					master.displayEvent("CT" + id + ": Incoming login attempt from user '" 
+							+ user.getUsername() + "' (" + ClientThread.getClientAddress(socket) + ").");
 					
 					// If the user credentials are correct, set the thread's user.
 					if (master.users.contains(user))
@@ -120,11 +112,12 @@ public class ClientThread extends Thread
 					// Send a negative response (invalid credentials).
 					streamOut.writeBoolean(false);
 					streamOut.flush();
+					master.displayEvent("CT" + id + ": Failed login attempt from user '" + user.getUsername() + "' (" + ClientThread.getClientAddress(socket) + ").");
 				}
 			}
 			
 			// Display a successful login in the event log.
-			master.displayEvent("User '" + user.getUsername() + "' connected.");
+			master.displayEvent("CT" + id + ": Successful login from user '" + user.getUsername() + "' (" + ClientThread.getClientAddress(socket) + ").");
 		}
 		catch (IOException ioe)
 		{
@@ -173,5 +166,10 @@ public class ClientThread extends Thread
 				socket.close();
 		}
 		catch (Exception e) {}
+	}
+	
+	public static String getClientAddress(Socket socket)
+	{
+		return socket.getInetAddress().toString() + ":" + socket.getPort();
 	}
 }

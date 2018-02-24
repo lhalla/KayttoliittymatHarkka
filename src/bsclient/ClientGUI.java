@@ -1,6 +1,9 @@
 package bsclient;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.*;
 
 public class ClientGUI extends JFrame
@@ -19,6 +22,17 @@ public class ClientGUI extends JFrame
         loginPrompt = new ClientLoginPrompt(this, true);
         loginPrompt.setTitle("Train Booking Service - Login");
         loginPrompt.setVisible(true);
+        
+     // Exit the program if the window is closed.
+        addWindowListener(new WindowAdapter()
+        {  
+            @Override
+            public void windowClosing(WindowEvent e)
+            {  
+            	client.logout();
+                System.exit(0);  
+            }  
+        });
     }
 
     /**
@@ -35,7 +49,7 @@ public class ClientGUI extends JFrame
                 JFrame frame = new ClientGUI();
                 frame.getContentPane().setBackground(Color.BLACK);
                 frame.setTitle("Train Booking Service");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
                 frame.setLocationRelativeTo(null);
                 frame.setSize(500, 500);
             }
