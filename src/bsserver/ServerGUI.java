@@ -29,22 +29,22 @@ public class ServerGUI extends JFrame implements ActionListener
 		server = null;
 		
 		// JPanel for the ON/OFF button
-		JPanel panelToggle = new JPanel();
-		buttonToggle = new JButton("Start");
-		buttonToggle.addActionListener(this);
-		panelToggle.add(buttonToggle);
-		add(panelToggle, BorderLayout.NORTH);
+		JPanel panelToggle = new JPanel();		// create a new panel for the button
+		buttonToggle = new JButton("Start");	// create the button
+		buttonToggle.addActionListener(this);	// add a listener to it to check when it's pressed
+		panelToggle.add(buttonToggle);			// add the button to the panel
+		add(panelToggle, BorderLayout.NORTH);	// add the panel to the frame
 		
 		// JPanel for the event log
-		JPanel panelEventLog = new JPanel(new GridLayout(1,1));
-		textAreaLog = new JTextArea(80, 30);
-		textAreaLog.setEditable(false);
+		JPanel panelEventLog = new JPanel(new GridLayout(1,1));	// create a new panel for the event log
+		textAreaLog = new JTextArea(80, 30);					// create a new text area to hold the log
+		textAreaLog.setEditable(false);							// set the text area as uneditable
+		panelEventLog.add(new JScrollPane(textAreaLog));		// add the text area to the panel
+		add(panelEventLog);										// add the panel to the frame
 		
 		appendEvent("Server event log.\n");
 		
-		panelEventLog.add(new JScrollPane(textAreaLog));
-		add(panelEventLog);
-		
+		// Add a listener to the frame to stop the server if the window is closed.
 		addWindowListener(new WindowAdapter() {  
 			@Override
 			public void windowClosing(WindowEvent e)
@@ -66,18 +66,22 @@ public class ServerGUI extends JFrame implements ActionListener
 			}  
         });
 		
+		// Set the size and make the frame visible.
 		setSize(450, 600);
 		setVisible(true);
 	}
 	
+	// Add an event to the event log.
 	public void appendEvent(String event)
 	{
 		textAreaLog.append(event);
 	}
 
+	// React to button presses.
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
+		// If the server is running, turn it off.
 		if (server != null)
 		{
 			server.stop();
@@ -86,22 +90,27 @@ public class ServerGUI extends JFrame implements ActionListener
 			return;
 		}
 		
+		// Otherwise turn it on.
 		server = new Server(this);
 		new ServerThread().start();
 		buttonToggle.setText("Stop");
 	}
 	
+	// Start a new Server GUI.
 	public static void main(String[] args)
 	{
 		new ServerGUI();
 	}
 	
+	// A thread for the server to run in.
 	class ServerThread extends Thread
 	{
 		public void run()
 		{
 			server.start();
 			buttonToggle.setText("Start");
+			
+			// If the server is still on yet server.start() has finished, it has crashed.
 			if (server != null && server.serverOn)
 				appendEvent("Server crashed.\n");
 			else
