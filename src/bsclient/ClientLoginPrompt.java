@@ -4,8 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ClientLoginPrompt extends JDialog implements ActionListener {
-
+public class ClientLoginPrompt extends JDialog implements ActionListener
+{
 	private static final long serialVersionUID = 1L;
 	
 	private final JFrame owner;
@@ -24,11 +24,21 @@ public class ClientLoginPrompt extends JDialog implements ActionListener {
     
     private Client client;
 
-    public ClientLoginPrompt() {
+    /**
+     * Constructor.
+     */
+    public ClientLoginPrompt()
+    {
         this(null, true);
     }
 
-    public ClientLoginPrompt(final JFrame owner, boolean modal) {
+    /**
+     * Constructor.
+     * @param owner owner of this prompt.
+     * @param modal
+     */
+    public ClientLoginPrompt(final JFrame owner, boolean modal)
+    {
         super(owner, modal);
 
         this.owner = owner;
@@ -74,21 +84,29 @@ public class ClientLoginPrompt extends JDialog implements ActionListener {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         // Exit the program if the window is closed.
-        addWindowListener(new WindowAdapter() {  
+        addWindowListener(new WindowAdapter()
+        {  
             @Override
-            public void windowClosing(WindowEvent e) {  
+            public void windowClosing(WindowEvent e)
+            {  
                 System.exit(0);  
             }  
         });
 
+        // Create a new client and try to start it.
         client = new Client((ClientGUI) owner);
         if (!client.start())
         	labelStatus.setText("Failed to connect to the server.");
 
+        // Add action listeners to Login, New User and Cancel buttons.
         buttonLogin.addActionListener(this);
+        buttonNewUser.addActionListener(this);
         buttonCancel.addActionListener(this);
     }
     
+    /**
+     * Listens for button presses.
+     */
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -97,15 +115,20 @@ public class ClientLoginPrompt extends JDialog implements ActionListener {
     	// Login button has been pressed.
     	if (o == buttonLogin)
     	{
+    		// Get the username and password from their respective fields.
     		String username = String.valueOf(fieldUser.getText());
     		String password = String.valueOf(fieldPass.getPassword());
+    		
+    		// Authenticate the credentials.
     		boolean res = client.authenticate(username, password);
     		
+    		// If successful, open the main frame.
     		if (res)
     		{
     			owner.setVisible(true);
     			setVisible(false);
     		}
+    		// Otherwise inform the user of invalid credentials.
     		else
     		{
     			labelStatus.setText("Invalid username or password");
@@ -117,15 +140,20 @@ public class ClientLoginPrompt extends JDialog implements ActionListener {
     	// New User button has been pressed.
     	if (o == buttonNewUser)
     	{
+    		// Get the username and password from their respective fields.
     		String username = String.valueOf(fieldUser.getText());
     		String password = String.valueOf(fieldPass.getPassword());
+    		
+    		// Attempt to create a new user with the credentials.
     		boolean res = client.createNewUser(username, password);
     		
+    		// If successful, open the main frame.
     		if (res)
     		{
     			owner.setVisible(true);
     			setVisible(false);
     		}
+    		// Otherwise inform the user that the username was taken.
     		else
     		{
     			labelStatus.setText("Username already taken.");
@@ -137,8 +165,13 @@ public class ClientLoginPrompt extends JDialog implements ActionListener {
     	// Cancel button has been pressed.
     	if (o == buttonCancel)
     	{
+    		// Hide the login prompt.
     		setVisible(false);
+    		
+    		// Dispose of the main frame.
     		owner.dispose();
+    		
+    		// Exit.
     		System.exit(0);
     	}
     }

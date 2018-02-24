@@ -7,9 +7,12 @@ public class ClientGUI extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	
-	private ClientLoginPrompt loginPrompt;
-	private Client client;
+	private ClientLoginPrompt loginPrompt;	// login prompt used at startup
+	private Client client;	// the client this clientGUI is tied to.
 
+	/**
+	 * Constructor.
+	 */
     public ClientGUI()
     {
     	// Open a login prompt.
@@ -18,6 +21,10 @@ public class ClientGUI extends JFrame
         loginPrompt.setVisible(true);
     }
 
+    /**
+     * Starts a new ClientGUI.
+     * @param args
+     */
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(new Runnable()

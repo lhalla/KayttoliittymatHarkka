@@ -54,7 +54,7 @@ public class User implements Serializable
 		if (o == null)
 			return false;
 		
-		if (getClass() != o.getClass())
+		if ((getClass() != o.getClass()) && !(o instanceof NewUser))
 			return false;
 		
 		User user = (User) o;

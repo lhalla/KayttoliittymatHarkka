@@ -40,7 +40,7 @@ public class ClientThread extends Thread
 			streamOut = new ObjectOutputStream(socket.getOutputStream());
 			streamIn = new ObjectInputStream(socket.getInputStream());
 			
-			// Loop until the client has been verified or the log out (LATTER NOT IMPLEMENTED YET)
+			// LOOP0: Loop until the client has been verified or the log out (LATTER NOT IMPLEMENTED YET)
 			while (true)
 			{
 				// Read an object from the incoming stream.
@@ -51,6 +51,7 @@ public class ClientThread extends Thread
 				{
 					user = (User) incobj;	// convert the incoming object into a User.
 					
+					// LOOP1: Go through all users to see if the name is taken.
 					for (User u : master.users)
 					{
 						// The username is already taken.
@@ -60,7 +61,7 @@ public class ClientThread extends Thread
 							streamOut.writeBoolean(false);
 							streamOut.flush();
 							
-							// Set the user to null and break from the loop.
+							// Set the user to null and break from LOOP1.
 							user = null;
 							break;
 						}
@@ -69,7 +70,14 @@ public class ClientThread extends Thread
 					// If the username wasn't taken, create a new user (NOT IMPLEMENTED YET).
 					if (user != null)
 					{
+						// Try to add a new user.
+						boolean res = master.addNewUser(user);
 						
+						// Send the result. If the attempt was successful, break from LOOP0.
+						streamOut.writeBoolean(res);
+						streamOut.flush();
+						if (res)
+							break;
 					}
 				}
 //				// If the client logs out or closes the login window, end the thread.

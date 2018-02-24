@@ -125,6 +125,33 @@ public class Server
 	}
 	
 	/**
+	 * Adds a new user to the user list.
+	 * @param newUser
+	 * @return
+	 */
+	synchronized boolean addNewUser(User newUser)
+	{
+		if (!users.contains(newUser))
+		{
+			users.add(newUser);
+			
+			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/users.dat")))
+			{
+				oos.writeObject(users);
+				displayEvent("A new user '" + newUser.getUsername() + "' added.");
+				return true;
+			}
+			catch (Exception e)
+			{
+				displayEvent("Addition of a new user '" + newUser.getUsername() + "' failed.");
+				return false;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Displays an event in the event log.
 	 * @param message event to be displayed.
 	 */
