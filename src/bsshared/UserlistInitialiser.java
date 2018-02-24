@@ -34,4 +34,9 @@ public class UserlistInitialiser
 			e.printStackTrace();
 		}
 	}
+	
+	public static void main(String[] args)
+	{
+		new UserlistInitialiser();
+	}
 }
