@@ -1,0 +1,108 @@
+package bsserver;
+
+import bsshared.*;
+
+import java.io.*;
+import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.function.Predicate;
+
+public class ClientThread extends Thread
+{
+	private Socket socket;	// client's socket
+	private ObjectInputStream streamIn;
+	private ObjectOutputStream streamOut;
+	
+	private final Server master;
+	protected final int id;	// connection id
+	
+	private User user;	// user logged in
+	private String date;
+	
+	public ClientThread(Server master, Socket socket, int id)
+	{
+		this.master = master;
+		this.id = id;
+		this.socket = socket;
+		
+		try (ObjectInputStream streamFile = new ObjectInputStream(new FileInputStream("src/data/users.dat")))
+		{
+			ArrayList<User> users = (ArrayList<User>) streamFile.readObject();
+			
+			streamOut = new ObjectOutputStream(socket.getOutputStream());
+			streamIn = new ObjectInputStream(socket.getInputStream());
+			
+			while (true)
+			{
+				user = (User) streamIn.readObject();
+				if (user instanceof NewUser)
+				{
+					for (User u : users)
+					{
+						if (u.getUsername().equals(users))
+						{
+							streamOut.writeBoolean(false);
+							streamOut.flush();
+						}
+					}
+				}
+				else
+				{
+					master.displayEvent("Incoming login attempt from user '" 
+							+ user.getUsername() + "' (" + socket.getInetAddress().toString() + ":" 
+							+ socket.getPort() + ").");
+					if (users.contains(user))
+					{
+						streamOut.writeBoolean(true);
+						streamOut.flush();
+						break;
+					}
+					streamOut.writeBoolean(false);
+					streamOut.flush();
+				}
+			}
+			
+			master.displayEvent("User '" + user.getUsername() + "' connected.");
+		}
+		catch (IOException ioe)
+		{
+			return;
+		}
+		catch (ClassNotFoundException cnfe)	{}
+		
+		date = new Date().toString() + "\n";
+	}
+	
+	public void run()
+	{
+		boolean keepRunning = true;
+		
+		master.remove(id);
+		close();
+	}
+	
+	public void close()
+	{
+		try
+		{
+			if (streamOut != null)
+				streamOut.close();
+		}
+		catch (Exception e) {}
+		
+		try
+		{
+			if (streamIn != null)
+				streamIn.close();
+		}
+		catch (Exception e) {}
+		
+		try
+		{
+			if (socket != null)
+				socket.close();
+		}
+		catch (Exception e) {}
+	}
+}
