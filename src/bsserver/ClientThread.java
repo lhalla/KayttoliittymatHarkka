@@ -26,10 +26,8 @@ public class ClientThread extends Thread
 		this.id = id;
 		this.socket = socket;
 		
-		try (ObjectInputStream streamFile = new ObjectInputStream(new FileInputStream("src/data/users.dat")))
+		try
 		{
-			ArrayList<User> users = (ArrayList<User>) streamFile.readObject();
-			
 			streamOut = new ObjectOutputStream(socket.getOutputStream());
 			streamIn = new ObjectInputStream(socket.getInputStream());
 			
@@ -38,9 +36,9 @@ public class ClientThread extends Thread
 				user = (User) streamIn.readObject();
 				if (user instanceof NewUser)
 				{
-					for (User u : users)
+					for (User u : master.users)
 					{
-						if (u.getUsername().equals(users))
+						if (u.getUsername().equals(user))
 						{
 							streamOut.writeBoolean(false);
 							streamOut.flush();
@@ -52,8 +50,13 @@ public class ClientThread extends Thread
 					master.displayEvent("Incoming login attempt from user '" 
 							+ user.getUsername() + "' (" + socket.getInetAddress().toString() + ":" 
 							+ socket.getPort() + ").");
-					if (users.contains(user))
+					if (master.users.contains(user))
 					{
+						for (User u : master.users)
+						{
+							if (u.equals(user))
+								user = u;
+						}
 						streamOut.writeBoolean(true);
 						streamOut.flush();
 						break;

@@ -1,5 +1,7 @@
 package bsserver;
 
+import bsshared.*;
+
 import java.io.*;
 import java.net.*;
 import java.text.SimpleDateFormat;
@@ -9,16 +11,31 @@ public class Server
 {
 	private static int uid;	// each connection has a unique identifier
 	private ArrayList<ClientThread> ctl; // each client has their own thread
-	private ServerGUI sgui;
+	private ServerGUI sgui;	// the GUI this server is tied to
 	private SimpleDateFormat sdf;
-	private final int port = 8800;
-	protected boolean serverOn;
+	private final int port = 8800;	// the port this server runs on
+	protected boolean serverOn;	// is this server running?
+	protected ArrayList<User> users;	// list of users
 	
+	// Constructor
 	public Server(ServerGUI sgui)
 	{
 		this.sgui = sgui;
 		sdf = new SimpleDateFormat("HH:mm:ss");
 		ctl = new ArrayList<ClientThread>();
+		
+		try (ObjectInputStream streamFile = new ObjectInputStream(new FileInputStream("src/data/users.dat")))
+		{
+			users = (ArrayList<User>) streamFile.readObject();
+		}
+		catch (ClassNotFoundException cnfe)
+		{
+			cnfe.printStackTrace();
+		}
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
 	}
 	
 	public void start()

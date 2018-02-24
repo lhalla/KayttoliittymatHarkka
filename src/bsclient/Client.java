@@ -18,12 +18,9 @@ public class Client
 	private final String server = "localhost";
 	private final int port = 8800;
 	
-	private User user;
-	
 	public Client(ClientGUI cgui)
 	{
 		this.cgui = cgui;
-		this.user = null;
 	}
 	
 	public boolean start()
