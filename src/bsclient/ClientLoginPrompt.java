@@ -125,6 +125,7 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
     		// If successful, open the main frame.
     		if (res)
     		{
+    			((ClientGUI) owner).client = client;
     			owner.setVisible(true);
     			setVisible(false);
     		}
@@ -150,6 +151,7 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
     		// If successful, open the main frame.
     		if (res)
     		{
+    			((ClientGUI) owner).client = client;
     			owner.setVisible(true);
     			setVisible(false);
     		}

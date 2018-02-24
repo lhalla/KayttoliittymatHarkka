@@ -10,6 +10,7 @@ public class UserlistReader
 	{
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/data/users.dat")))
 		{
+			@SuppressWarnings("unchecked")
 			ArrayList<User> al = (ArrayList<User>) ois.readObject();
 			al.stream().forEach(usr -> System.out.println("Username: " + usr.getUsername()));
 		}

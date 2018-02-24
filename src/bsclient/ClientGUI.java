@@ -8,7 +8,7 @@ public class ClientGUI extends JFrame
 	private static final long serialVersionUID = 1L;
 	
 	private ClientLoginPrompt loginPrompt;	// login prompt used at startup
-	private Client client;	// the client this clientGUI is tied to.
+	protected Client client;	// the client this clientGUI is tied to.
 
 	/**
 	 * Constructor.

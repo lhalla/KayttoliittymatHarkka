@@ -6,7 +6,6 @@ import java.io.*;
 import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Predicate;
 
 // A thread for each client.
 public class ClientThread extends Thread

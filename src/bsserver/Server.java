@@ -21,6 +21,7 @@ public class Server
 	 * Constructor.
 	 * @param sgui the ServerGUI this Server instance is tied to.
 	 */
+	@SuppressWarnings("unchecked")
 	public Server(ServerGUI sgui)
 	{
 		this.sgui = sgui;
@@ -97,10 +98,7 @@ public class Server
 		serverOn = false;
 		
 		// Connect to itself as a client -> serverOn is detected to be false.
-		try
-		{
-			new Socket("localhost", port);
-		}
+		try (Socket sock = new Socket("localhost", port)) {}
 		catch (Exception e) {}
 	}
 	
@@ -131,10 +129,13 @@ public class Server
 	 */
 	synchronized boolean addNewUser(User newUser)
 	{
+		// If the user list doesn't contain a user with the same name, add it.
 		if (!users.contains(newUser))
 		{
+			// Add the user.
 			users.add(newUser);
 			
+			// Save the new user list.
 			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/users.dat")))
 			{
 				oos.writeObject(users);
@@ -144,6 +145,7 @@ public class Server
 			catch (Exception e)
 			{
 				displayEvent("Addition of a new user '" + newUser.getUsername() + "' failed.");
+				users.remove(newUser);
 				return false;
 			}
 		}
