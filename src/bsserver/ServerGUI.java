@@ -23,6 +23,9 @@ public class ServerGUI extends JFrame implements ActionListener
 	private JTextArea textAreaLog;
 	private Server server;
 	
+	/**
+	 * Constructor.
+	 */
 	public ServerGUI()
 	{
 		super("Train Booking Service - Server");
@@ -71,13 +74,18 @@ public class ServerGUI extends JFrame implements ActionListener
 		setVisible(true);
 	}
 	
-	// Add an event to the event log.
+	/**
+	 * Adds an event to the event log.
+	 * @param event an event to be added to the log.
+	 */
 	public void appendEvent(String event)
 	{
 		textAreaLog.append(event);
 	}
 
-	// React to button presses.
+	/**
+	 * Reacts to button presses.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -96,7 +104,10 @@ public class ServerGUI extends JFrame implements ActionListener
 		buttonToggle.setText("Stop");
 	}
 	
-	// Start a new Server GUI.
+	/**
+	 * Starts a new Server GUI.
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		new ServerGUI();
@@ -105,6 +116,9 @@ public class ServerGUI extends JFrame implements ActionListener
 	// A thread for the server to run in.
 	class ServerThread extends Thread
 	{
+		/**
+		 * Runs the thread.
+		 */
 		public void run()
 		{
 			server.start();

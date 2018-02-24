@@ -21,6 +21,12 @@ public class ClientThread extends Thread
 	private User user;	// user logged in
 	private String date;	// date to determine which train routes to show
 	
+	/**
+	 * Constructor.
+	 * @param master the Server owning of this ClientThread.
+	 * @param socket the socket used to communicate with the client.
+	 * @param id the unique id of this ClientThread.
+	 */
 	public ClientThread(Server master, Socket socket, int id)
 	{
 		this.master = master;
@@ -119,7 +125,9 @@ public class ClientThread extends Thread
 		date = new Date().toString() + "\n";
 	}
 	
-	// Run the server (NOT YET IMPLEMENTED).
+	/**
+	 * Runs the server (NOT YET IMPLEMENTED).
+	 */
 	public void run()
 	{
 		// Keep running (FOR A WHILE LOOP TO BE IMPLEMENTED).
@@ -130,7 +138,9 @@ public class ClientThread extends Thread
 		close();
 	}
 	
-	// Close the streams and the socket.
+	/**
+	 * Closes the streams and the socket.
+	 */
 	public void close()
 	{
 		try

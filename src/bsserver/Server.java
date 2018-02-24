@@ -17,7 +17,10 @@ public class Server
 	protected boolean serverOn;	// is this server running?
 	protected ArrayList<User> users;	// list of users
 	
-	// Constructor
+	/**
+	 * Constructor.
+	 * @param sgui the ServerGUI this Server instance is tied to.
+	 */
 	public Server(ServerGUI sgui)
 	{
 		this.sgui = sgui;
@@ -39,7 +42,9 @@ public class Server
 		}
 	}
 	
-	// Start the server.
+	/**
+	 * Starts the server.
+	 */
 	public void start()
 	{
 		// The server is on.
@@ -84,7 +89,9 @@ public class Server
 		}
 	}
 	
-	// Stop the server.
+	/**
+	 * Stops the server.
+	 */
 	protected void stop()
 	{
 		serverOn = false;
@@ -97,7 +104,10 @@ public class Server
 		catch (Exception e) {}
 	}
 	
-	// Remove a ClienThread with a given id from the list once the connection ends.
+	/**
+	 * Removes a ClienThread with a given id from the list once the connection ends.
+	 * @param id ClientThread's unique id.
+	 */
 	synchronized void remove(int id)
 	{
 		// Go through all of the threads until one with the correct id is found.
@@ -114,7 +124,10 @@ public class Server
 		}
 	}
 	
-	// Display an event in the event log.
+	/**
+	 * Displays an event in the event log.
+	 * @param message event to be displayed.
+	 */
 	protected void displayEvent(String message)
 	{
 		String event = sdf.format(new Date()) + " " + message;
