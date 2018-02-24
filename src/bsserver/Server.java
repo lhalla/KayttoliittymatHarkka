@@ -24,6 +24,7 @@ public class Server
 		sdf = new SimpleDateFormat("HH:mm:ss");
 		ctl = new ArrayList<ClientThread>();
 		
+		// Load a list of all users from file.
 		try (ObjectInputStream streamFile = new ObjectInputStream(new FileInputStream("src/data/users.dat")))
 		{
 			users = (ArrayList<User>) streamFile.readObject();
@@ -38,9 +39,13 @@ public class Server
 		}
 	}
 	
+	// Start the server.
 	public void start()
 	{
+		// The server is on.
 		serverOn = true;
+		
+		// Display the starting event in the log.
 		displayEvent("Server started on port " + port + ".");
 		
 		// Create a server socket and wait for incoming connections.
@@ -51,17 +56,20 @@ public class Server
 				// Accept an incoming connection
 				Socket socket = serverSocket.accept();
 				
+				// If the server has been turned off, break out of the loop.
 				if (!serverOn)
 					break;
 				
+				// Start a new thread for the new client.
 				ClientThread ct = new ClientThread(this, socket, ++uid);
 				ctl.add(ct);
 				ct.start();
 			}
 			
+			// Once the server has been told to turn off, close all the clien threads.
 			try
 			{
-				// Close all client threads.
+				// Close all ClientThreads.
 				for (ClientThread ct : ctl)
 					ct.close();
 			}
@@ -76,10 +84,12 @@ public class Server
 		}
 	}
 	
+	// Stop the server.
 	protected void stop()
 	{
 		serverOn = false;
 		
+		// Connect to itself as a client -> serverOn is detected to be false.
 		try
 		{
 			new Socket("localhost", port);
@@ -87,12 +97,15 @@ public class Server
 		catch (Exception e) {}
 	}
 	
+	// Remove a ClienThread with a given id from the list once the connection ends.
 	synchronized void remove(int id)
 	{
+		// Go through all of the threads until one with the correct id is found.
 		for (int i = 0; i < ctl.size(); i++)
 		{
 			ClientThread ct = ctl.get(i);
 			
+			// Remove it.
 			if (ct.id == id)
 			{
 				ctl.remove(i);
@@ -101,6 +114,7 @@ public class Server
 		}
 	}
 	
+	// Display an event in the event log.
 	protected void displayEvent(String message)
 	{
 		String event = sdf.format(new Date()) + " " + message;
