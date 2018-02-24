@@ -1,6 +1,7 @@
 package bsclient;
 
 import bsshared.*;
+import messages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -110,5 +111,18 @@ public class Client
 			System.err.println("Exception when trying to send NewUser object.");
 		}
 		return false;
+	}
+	
+	public void logout()
+	{
+		if (socket != null && !socket.isClosed())
+		{
+			try
+			{
+				streamOut.writeObject(new Logout());
+				streamOut.flush();
+			}
+			catch (IOException ioe)	{}
+		}
 	}
 }

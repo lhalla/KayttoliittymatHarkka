@@ -62,6 +62,8 @@ public class Server
 				// Accept an incoming connection
 				Socket socket = serverSocket.accept();
 				
+				displayEvent("Beep!");
+				
 				// If the server has been turned off, break out of the loop.
 				if (!serverOn)
 					break;

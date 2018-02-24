@@ -167,6 +167,8 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
     	// Cancel button has been pressed.
     	if (o == buttonCancel)
     	{
+    		client.logout();
+    		
     		// Hide the login prompt.
     		setVisible(false);
     		

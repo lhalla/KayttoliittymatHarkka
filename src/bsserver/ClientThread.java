@@ -1,6 +1,7 @@
 package bsserver;
 
 import bsshared.*;
+import messages.*;
 
 import java.io.*;
 import java.net.*;
@@ -28,6 +29,7 @@ public class ClientThread extends Thread
 	 */
 	public ClientThread(Server master, Socket socket, int id)
 	{
+		master.displayEvent("New ClientThread (" + id + ") started for connection from (" + socket.getInetAddress().toString() + ":" + socket.getPort() + ").");
 		this.master = master;
 		this.id = id;
 		this.socket = socket;
@@ -79,11 +81,12 @@ public class ClientThread extends Thread
 							break;
 					}
 				}
-//				// If the client logs out or closes the login window, end the thread.
-//				else if (incobj instanceof Message)
-//				{
-//					
-//				}
+				// If the client logs out or closes the login window, end the thread.
+				else if (incobj instanceof Logout)
+				{
+					master.remove(id);
+					close();
+				}
 				// Otherwise check if the credentials are correct.
 				else
 				{
@@ -97,10 +100,10 @@ public class ClientThread extends Thread
 					// If the user credentials are correct, set the thread's user.
 					if (master.users.contains(user))
 					{
-						// Go through all the users to try to find a match.
+						// LOOP2: Go through all the users to try to find a match.
 						for (User u : master.users)
 						{
-							// If a match is found, set the user and break out of the loop.
+							// If a match is found, set the user and break out of LOOP2.
 							if (u.equals(user))
 							{
 								user = u;
@@ -108,7 +111,7 @@ public class ClientThread extends Thread
 							}
 						}
 						
-						// Send a positive response (valid credentials) and break out of the loop.
+						// Send a positive response (valid credentials) and break out of LOOP0.
 						streamOut.writeBoolean(true);
 						streamOut.flush();
 						break;
