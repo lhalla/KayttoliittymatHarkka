@@ -12,6 +12,8 @@ public class Client
 {
 	private ClientGUI cgui;	// the GUI this client is tied to.
 	
+	private User user;
+	
 	private ObjectInputStream streamIn;	// object stream for incoming communication
 	private ObjectOutputStream streamOut;	// object stream for outgoing communication
 	private Socket socket;	// the socket of the connection
@@ -70,7 +72,7 @@ public class Client
 	public boolean authenticate(String username, String password)
 	{
 		// Create a User object using the given credentials.
-		User user = new User(username, password);
+		this.user = new User(username, password);
 		
 		// Send the User object to the server to check if they were correct.
 		try
