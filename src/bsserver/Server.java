@@ -108,7 +108,7 @@ public class Server
 	 * Removes a ClienThread with a given id from the list once the connection ends.
 	 * @param id ClientThread's unique id.
 	 */
-	synchronized void remove(int id)
+	synchronized protected void remove(int id)
 	{
 		// Go through all of the threads until one with the correct id is found.
 		for (int i = 0; i < ctl.size(); i++)
@@ -129,7 +129,7 @@ public class Server
 	 * @param newUser
 	 * @return
 	 */
-	synchronized boolean addNewUser(User newUser)
+	synchronized protected boolean addNewUser(User newUser)
 	{
 		// If the user list doesn't contain a user with the same name, add it.
 		if (!usernameTaken(newUser))
@@ -138,13 +138,12 @@ public class Server
 			users.add(newUser);
 			
 			// Save the new user list.
-			try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/users.dat")))
+			if (saveUsers())
 			{
-				oos.writeObject(users);
 				displayEvent("A new user '" + newUser.getUsername() + "' added.");
 				return true;
 			}
-			catch (Exception e)
+			else
 			{
 				displayEvent("Addition of a new user '" + newUser.getUsername() + "' failed.");
 				users.remove(newUser);
@@ -169,6 +168,19 @@ public class Server
 		}
 		
 		return false;
+	}
+	
+	synchronized protected boolean saveUsers()
+	{
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/users.dat")))
+		{
+			oos.writeObject(users);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
 	}
 	
 	/**
