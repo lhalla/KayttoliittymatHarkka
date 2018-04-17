@@ -47,7 +47,7 @@ public class ClientGUI extends JFrame
             public void run()
             {
                 JFrame frame = new ClientGUI();
-                frame.getContentPane().setBackground(Color.BLACK);
+                frame = new TrainBookingService(frame).makeWindow();
                 frame.setTitle("Train Booking Service");
                 
                 frame.setLocationRelativeTo(null);
