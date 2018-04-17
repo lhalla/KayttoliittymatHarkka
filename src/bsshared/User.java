@@ -1,6 +1,7 @@
 package bsshared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable
 {
@@ -9,6 +10,7 @@ public class User implements Serializable
 	protected String username, password;
 	protected String address;
 	protected String ccNumber;
+	protected ArrayList<String> varaukset;
 	
 	public User(String username, String password)
 	{
@@ -16,6 +18,7 @@ public class User implements Serializable
 		this.password = password;
 		this.address = "";
 		this.ccNumber = "";
+		this.varaukset = new ArrayList<String>();
 	}
 	
 	// Getters
@@ -43,6 +46,12 @@ public class User implements Serializable
 	public void setCCNumber(String ccNumber)
 	{
 		this.ccNumber = ccNumber;
+	}
+	public ArrayList<String> getVaraukset(){
+		return varaukset;
+	}
+	public void setVaraukset(ArrayList<String> varaukset){
+		this.varaukset=varaukset;
 	}
 	
 	@Override
