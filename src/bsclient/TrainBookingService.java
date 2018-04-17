@@ -16,7 +16,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.*;
-
+import bsshared.*;
+import messages.*;
 
  
 
@@ -25,20 +26,23 @@ import javax.swing.*;
 public class TrainBookingService {
 
 	private boolean isAdmin;
+	
+	private String username;
+	private ArrayList<String> varaukset;
 
     private JFrame frame;
 
     private final int basewidth=200;
     private final int baseheight=200;
     
-    private boolean inVaraukset=false;
+    private boolean inSecondScreen=false;
     
     private ButtonListener bl;
     private ArrayList<JButton> ButtonList = new ArrayList<JButton>();
     
     
     //panels here
-    //!paneeleissa ei saa k‰ytt‰‰ boxlayout
+    //!paneeleissa ei saa k√§ytt√§√§ boxlayout
 
     private JPanel leftPanel = new JPanel();
     private JPanel topPanel = new JPanel();
@@ -48,11 +52,18 @@ public class TrainBookingService {
     //buttons here
     private JButton button1 = new JButton("VARAA");
     private JButton button2 = new JButton("VARAUKSENI");
-    private JButton button3 = new JButton("POISTU");
+    private JButton button3 = new JButton("?");
     
-    private JButton button4 = new JButton("adminbutton 1");
-    private JButton button5 = new JButton("adminbutton 2");
-    private JButton button6 = new JButton("adminbutton 3");
+    private JButton button4 = new JButton("?");
+    private JButton button5 = new JButton("Admin-ASETUKSET");
+    
+    private JButton button6 = new JButton("POISTU");
+    
+    private JButton button7 = new JButton("?");
+    
+    private JButton button8 = new JButton("ASETUKSET");
+    private JButton button9 = new JButton("PERU VARAUKSENI");
+    private JButton button10 = new JButton("?");
     
     private JButton buttonVaraa1 = new JButton("matka helsinkiin");
     private JButton buttonVaraa2 = new JButton("matka turkuun");
@@ -61,10 +72,16 @@ public class TrainBookingService {
     private JButton buttonTakaisin = new JButton("TAKAISIN");
     
     
-    public TrainBookingService(JFrame frame) {
-
+    public TrainBookingService(JFrame frame, String username, ArrayList<String> varaukset) {
+    	this.username=username;
     	this.frame=frame;
-      	isAdmin=false;
+    	this.varaukset=varaukset;
+    	if(username.equals("admin")){
+    		isAdmin=true;
+    	}
+    	else{
+    		isAdmin=false;
+    	}
     	}
 
     public JFrame makeWindow() {
@@ -109,10 +126,15 @@ public class TrainBookingService {
     makeButtonLP(button2);
     makeButtonLP(button3);
     //topPanel
+    if(isAdmin){
     makeButtonTP(button4);
     makeButtonTP(button5);
+    }
+    else{
+    makeButtonTP(button7);
+    makeButtonTP(button8);	
+    }
     makeButtonTP(button6);
-    
     
     
     frame.add(centerPanel, BorderLayout.CENTER);
@@ -179,14 +201,28 @@ public class TrainBookingService {
     
     private void varauksetMetodi(){
     	image.setIcon(null);
-    	image.setText("Varauksesi lukevat t‰ss‰: ");
+    	StringBuilder KaikkiVaraukset = new StringBuilder();
+    	KaikkiVaraukset.append("\n");
+    	for(int i=0;i<varaukset.size();i++){
+    		KaikkiVaraukset.append(varaukset.get(i));
+    		KaikkiVaraukset.append("\n");
+    	}
+    	image.setText(username + ", Sinun varauksesi lukevat t√§ss√§: " + KaikkiVaraukset.toString());
     	
-    	//varaukset here
+    	
     	
     	centerPanel.setBackground(Color.BLACK);
     	image.setForeground (Color.green);
     }
+    private void asetuksetMetodi(){
+    	image.setIcon(null);
+    	
+    	
+    }
     
+    protected ArrayList<String> getVaraukset(){
+    	return varaukset;
+    }
     
    
     
@@ -205,45 +241,68 @@ public class TrainBookingService {
   	    }
   	    if(e.getSource() == button2) {
   	    	//varaukset
-  	    	inVaraukset=true;
+  	    	inSecondScreen=true;
   	    	clearButtons();
   	    	makeButtonLP(buttonTakaisin);
   	    	varauksetMetodi();
   	    }
   	    if(e.getSource() == button3) {
+  	    	//?
+  	    	
+	    }
+  	    if(e.getSource() == button4) {
+  	    	//?
+	    }
+  	    if(e.getSource() == button5) {
+  	    	//admin asetukset
+	    }
+  	    if(e.getSource() == button6) {
   	    	//logout
   	    	frame.dispose();
 	    }
-  	    if(e.getSource() == button4) {
-  	    	//doStuff()
-	    }
-  	    if(e.getSource() == button5) {
-  	    	//doStuff()
-	    }
-  	    if(e.getSource() == button6) {
-  	    	//doStuff()
-	    }
+  	  	if(e.getSource() == button7) {
+	    	//?
+  		}
+  		if(e.getSource() == button8) {
+	    	//asetukset
+  			clearButtons();
+  			makeButtonLP(button9);
+  			makeButtonLP(button10);
+  			makeButtonLP(buttonTakaisin);
+  			
+  		}
+  		if(e.getSource() == button9) {
+	    	//?
+  		}
+  		if(e.getSource() == button10) {
+	    	//?
+  		}
   	    if(e.getSource() == buttonVaraa1) {
-	    	//doStuff()
+	    	//helsinki
+  	    	varaukset.add("Helsinki");
 	    }
   	    if(e.getSource() == buttonVaraa2) {
-	    	//doStuff()
+	    	//turku
+  	    	varaukset.add("Turku");
   	    }
   	    if(e.getSource() == buttonVaraa3) {
-	    	//doStuff()
+	    	//tampere
+  	    	varaukset.add("Tampere");
   	    }
   	    if(e.getSource() == buttonTakaisin) {
 	    	clearButtons();
   	    	makeButtonLP(button1);
   	    	makeButtonLP(button2);
   	    	makeButtonLP(button3);
-  	    	if(inVaraukset){
+  	    	if(inSecondScreen){
   	    		image.setText(null);
   	    		image.setForeground(Color.WHITE);
   	    		centerPanel.setBackground(Color.WHITE);
+  	    		inSecondScreen=false;
   	    	}
   	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
   	    }  	  
   	}
   	}
+  	
 }
