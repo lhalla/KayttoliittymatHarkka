@@ -1,5 +1,8 @@
 package bsclient;
 
+import java.util.ArrayList;
+import bsshared.*;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -12,7 +15,9 @@ public class ClientGUI extends JFrame
 	
 	private ClientLoginPrompt loginPrompt;	// login prompt used at startup
 	protected Client client;	// the client this clientGUI is tied to.
-
+	protected User user;
+	protected static String username;
+	protected static ArrayList<String> varaukset;
 	/**
 	 * Constructor.
 	 */
@@ -45,13 +50,14 @@ public class ClientGUI extends JFrame
         {
             @Override
             public void run()
-            {
+            {            	
                 JFrame frame = new ClientGUI();
-                frame = new TrainBookingService(frame).makeWindow();
-                frame.setTitle("Train Booking Service");
+                TrainBookingService service= new TrainBookingService(frame,username,varaukset);
                 
+                frame = service.makeWindow();
+                frame.setTitle("Train Booking Service");
                 frame.setLocationRelativeTo(null);
-                frame.setSize(500, 500);
+                
             }
         });
     }
