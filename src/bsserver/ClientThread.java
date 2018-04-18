@@ -129,6 +129,28 @@ public class ClientThread extends Thread
 			
 			// Display a successful login in the event log.
 			master.displayEvent("CT" + id + ": Successful login from user '" + user.getUsername() + "' (" + ClientThread.getClientAddress(socket) + ").");
+			
+			while(true){
+				// Read an object from the incoming stream.
+				Object objIn = streamIn.readObject();
+				if (objIn instanceof Logout)
+				{
+					user = (User) streamIn.readObject();
+
+					//save user to master
+					for(User u : master.users){
+						if(u.equals(user)){
+							u=user;
+							master.saveUsers();
+							break;
+						}
+					}
+					
+					master.displayEvent("CT" + id + ": Connection closed: LOGOUT.");
+					master.remove(id);
+					close();
+				}
+			}
 		}
 		catch (IOException ioe)
 		{
