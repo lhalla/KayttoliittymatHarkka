@@ -89,6 +89,7 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
             @Override
             public void windowClosing(WindowEvent e)
             {  
+	    	client.logout();
                 System.exit(0);  
             }  
         });
