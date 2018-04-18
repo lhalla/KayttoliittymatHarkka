@@ -34,6 +34,17 @@ public class ClientThread extends Thread
 		this.id = id;
 		this.socket = socket;
 		
+		date = new Date().toString() + "\n";
+	}
+	
+	/**
+	 * Runs the server (NOT YET IMPLEMENTED).
+	 */
+	public void run()
+	{
+		// Keep running (FOR A WHILE LOOP TO BE IMPLEMENTED).
+		boolean keepRunning = true;
+		
 		// Establish a connection with the client
 		try
 		{
@@ -124,17 +135,6 @@ public class ClientThread extends Thread
 			return;
 		}
 		catch (ClassNotFoundException cnfe)	{}
-		
-		date = new Date().toString() + "\n";
-	}
-	
-	/**
-	 * Runs the server (NOT YET IMPLEMENTED).
-	 */
-	public void run()
-	{
-		// Keep running (FOR A WHILE LOOP TO BE IMPLEMENTED).
-		boolean keepRunning = true;
 		
 		// Finally remove this thread from the master's ClientThreads and close it.
 		master.remove(id);
