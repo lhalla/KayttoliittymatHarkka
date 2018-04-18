@@ -117,6 +117,10 @@ public class Client
 	
 	public void logout()
 	{
+		if(user != null){
+		System.out.println("logging out, user varaukset:" + user.getVaraukset());
+		}
+		
 		if (socket != null && !socket.isClosed())
 		{
 			try
@@ -125,6 +129,7 @@ public class Client
 				streamOut.flush();
 			}
 			catch (IOException ioe)	{}
+
 		}
 	}
 }
