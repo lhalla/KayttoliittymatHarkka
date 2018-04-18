@@ -117,8 +117,10 @@ public class Client
 	
 	public void logout()
 	{
+		boolean logOutFromLoginScreen = true;
 		if(user != null){
-		System.out.println("logging out, user varaukset:" + user.getVaraukset());
+			logOutFromLoginScreen=false;
+			System.out.println("logging out, user varaukset:" + user.getVaraukset());
 		}
 		
 		if (socket != null && !socket.isClosed())
@@ -127,6 +129,11 @@ public class Client
 			{
 				streamOut.writeObject(new Logout());
 				streamOut.flush();
+				if(!logOutFromLoginScreen){
+					streamOut.writeObject(user);
+					streamOut.flush();
+				}
+				
 			}
 			catch (IOException ioe)	{}
 
