@@ -258,7 +258,7 @@ public class TrainBookingService {
 	    }
   	    if(e.getSource() == button6) {
   	    	//logout
-  	    	frame.dispose();
+  	    	
 	    }
   	  	if(e.getSource() == button7) {
 	    	//?
