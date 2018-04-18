@@ -12,7 +12,7 @@ public class Client
 {
 	private ClientGUI cgui;	// the GUI this client is tied to.
 	
-	private User user;
+	protected User user;
 	
 	private ObjectInputStream streamIn;	// object stream for incoming communication
 	private ObjectOutputStream streamOut;	// object stream for outgoing communication

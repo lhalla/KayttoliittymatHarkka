@@ -126,9 +126,9 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
     		if (res)
     		{
     			((ClientGUI) owner).client = client;
-			((ClientGUI) owner).user = client.getUser();
-    			((ClientGUI) owner).username = client.getUser().getUsername();
-    			((ClientGUI) owner).varaukset = client.getUser().getVaraukset();
+			((ClientGUI) owner).user = client.user;
+    			((ClientGUI) owner).username = client.user.getUsername();
+    			((ClientGUI) owner).varaukset = client.user.getVaraukset();
     			owner.setVisible(true);
     			setVisible(false);
     		}
