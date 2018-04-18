@@ -34,6 +34,9 @@ public class ClientGUI extends JFrame
             @Override
             public void windowClosing(WindowEvent e)
             {  
+	    	varaukset=service.getVaraukset();
+            	user.setVaraukset(varaukset);
+            	client.user=user;
             	client.logout();
                 System.exit(0);  
             }  
