@@ -115,6 +115,25 @@ public class Client
 		return false;
 	}
 	
+	public void updateUser()
+	{
+		UserUpdate uuMessage = new UserUpdate(user);
+		
+		if (socket != null && !socket.isClosed())
+		{
+			try
+			{
+				while (true)
+				{
+					streamOut.writeObject(uuMessage);
+					streamOut.flush();
+					if (streamIn.readBoolean()) break;
+				}
+			}
+			catch (IOException ioe) {}
+		}
+	}
+	
 	public void logout()
 	{
 		boolean logOutFromLoginScreen = true;
@@ -127,12 +146,9 @@ public class Client
 		{
 			try
 			{
+				updateUser();
 				streamOut.writeObject(new Logout());
 				streamOut.flush();
-				if(!logOutFromLoginScreen){
-					streamOut.writeObject(user);
-					streamOut.flush();
-				}
 				
 			}
 			catch (IOException ioe)	{}

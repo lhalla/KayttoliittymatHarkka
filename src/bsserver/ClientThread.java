@@ -135,20 +135,16 @@ public class ClientThread extends Thread
 				Object objIn = streamIn.readObject();
 				if (objIn instanceof Logout)
 				{
-					user = (User) streamIn.readObject();
-
-					//save user to master
-					for(User u : master.users){
-						if(u.equals(user)){
-							u=user;
-							master.saveUsers();
-							break;
-						}
-					}
-					
 					master.displayEvent("CT" + id + ": Connection closed: LOGOUT.");
 					master.remove(id);
 					close();
+				}
+				else if (objIn instanceof UserUpdate)
+				{
+					boolean res = master.updateUser(this.user, (UserUpdate)objIn);
+					master.displayEvent("CT" + id + ": User update " + (res ? "successful." : "failed."));
+					streamOut.writeBoolean(res);
+					streamOut.flush();
 				}
 			}
 		}

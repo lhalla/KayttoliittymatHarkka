@@ -12,6 +12,8 @@ public class User implements Serializable
 	protected String ccNumber;
 	protected ArrayList<String> varaukset;
 	
+	public User() { this("",""); }
+	
 	public User(String username, String password)
 	{
 		this.username = username;
@@ -22,36 +24,30 @@ public class User implements Serializable
 	}
 	
 	// Getters
-	public String getUsername()
-	{
-		return username;
-	}
+	public String getUsername() { return username; }
 	
-	public String getAddress()
-	{
-		return address;
-	}
+	public String getAddress() { return address; }
 	
-	public String getCCNumber()
-	{
-		return ccNumber;
-	}
+	public String getCCNumber() { return ccNumber; }
+	
+	public ArrayList<String> getVaraukset() { return varaukset; }
 	
 	// Setters
-	public void setAddress(String address)
-	{
-		this.address = address;
-	}
+	public void setAddress(String address) { this.address = address; }
 	
-	public void setCCNumber(String ccNumber)
+	public void setCCNumber(String ccNumber) { this.ccNumber = ccNumber; }
+	
+	public void setVaraukset(ArrayList<String> varaukset) { this.varaukset=varaukset; }
+	
+	public void copy(User other)
 	{
-		this.ccNumber = ccNumber;
-	}
-	public ArrayList<String> getVaraukset(){
-		return varaukset;
-	}
-	public void setVaraukset(ArrayList<String> varaukset){
-		this.varaukset=varaukset;
+		this.username = other.username;
+		this.password = other.password;
+		this.address = other.address;
+		this.ccNumber = other.ccNumber;
+		
+		for (String varaus : other.varaukset)
+			this.varaukset.add(varaus);
 	}
 	
 	@Override

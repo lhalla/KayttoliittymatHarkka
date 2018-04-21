@@ -1,6 +1,7 @@
 package bsserver;
 
 import bsshared.*;
+import messages.*;
 
 import java.io.*;
 import java.net.*;
@@ -152,6 +153,27 @@ public class Server
 		}
 		
 		return false;
+	}
+	
+	synchronized protected boolean updateUser(User user, UserUpdate uuMessage)
+	{
+		boolean res = users.remove(user);
+		
+		if (!res) return res;
+		
+		User updUser = new User();
+		updUser.copy(uuMessage.getUser());
+		
+		res = users.add(updUser);
+		
+		if (!res) return res;
+		
+		while (true)
+		{
+			if (saveUsers()) break;
+		}
+		
+		return true;
 	}
 	
 	/**
