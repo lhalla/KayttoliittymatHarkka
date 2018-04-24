@@ -19,6 +19,10 @@ import javax.swing.*;
 import bsshared.*;
 import messages.*;
 
+import java.awt.EventQueue;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
  
 
  
@@ -67,9 +71,19 @@ public class TrainBookingService {
     private JButton peruVarauksetButton = new JButton("PERU VARAUKSENI");
     private JButton buttonA = new JButton("?");
     
-    private JButton buttonVaraa1 = new JButton("matka helsinkiin");
-    private JButton buttonVaraa2 = new JButton("matka turkuun");
-    private JButton buttonVaraa3 = new JButton("matka tampereelle");
+//    private JButton buttonVaraa1 = new JButton("matka helsinkiin");
+//    private JButton buttonVaraa2 = new JButton("matka turkuun");
+//    private JButton buttonVaraa3 = new JButton("matka tampereelle");
+    
+    private JButton hyvaksyButton = new JButton("Hyvaksy");
+    private JButton peruButton = new JButton("Peru");
+    
+  	
+    
+    private JComboBox<String> paivamaaraBox1;
+    private JComboBox<String> paivamaaraBox2;
+    private JComboBox<String> kellonaikaBox;
+    private JComboBox<String> kohdeBox;
     
     private JButton buttonTakaisin = new JButton("TAKAISIN");
     
@@ -209,7 +223,7 @@ public class TrainBookingService {
     		KaikkiVaraukset.append(user.getVaraukset().get(i));
     		KaikkiVaraukset.append("\n");
     	}
-    	image.setFont(new Font("Tahoma", Font.BOLD,24));
+    	image.setFont(new Font("Tahoma", Font.BOLD,12));
     	image.setText(user.getUsername() + ", Sinun varauksesi lukevat tässä: " + KaikkiVaraukset.toString());
     	
     	centerPanel.setBackground(Color.BLACK);
@@ -227,6 +241,22 @@ public class TrainBookingService {
     	
     	
     }
+    private void varausMetodi(){
+    	String[] kohde= new String[]{"Helsinki","Turku","Tampere"};
+    	String[] kellonaika= new String[]{"klo 8","klo 10","klo 12","klo 14","klo 20","klo 24"};
+    	String[] paivamaara= new String[]{"1.","2.","3.","4.","5.","6."};
+    	String[] kuukausi= new String[]{"tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kes�kuu"};
+    	kohdeBox= new JComboBox<>(kohde);
+    	kellonaikaBox= new JComboBox<>(kellonaika);
+    	paivamaaraBox1= new JComboBox<>(paivamaara);
+    	paivamaaraBox2= new JComboBox<>(kuukausi);
+    	leftPanel.add(kohdeBox);
+    	leftPanel.add(kellonaikaBox);
+    	leftPanel.add(paivamaaraBox1);
+    	leftPanel.add(paivamaaraBox2);
+    	makeButtonLP(hyvaksyButton);
+    	makeButtonLP(peruButton);
+    }
     
     protected ArrayList<String> getVaraukset(){
     	return user.getVaraukset();
@@ -242,10 +272,7 @@ public class TrainBookingService {
   	    if(e.getSource() == varausButton) {
   	    	//varaa
   	    	clearButtons();
-  	    	makeButtonLP(buttonVaraa1);
-  	    	makeButtonLP(buttonVaraa2);
-  	    	makeButtonLP(buttonVaraa3);
-  	    	makeButtonLP(buttonTakaisin);
+	    	varausMetodi();
   	    }
   	    if(e.getSource() == varaukseniButton) {
   	    	//varaukset
@@ -288,18 +315,32 @@ public class TrainBookingService {
   		if(e.getSource() == buttonA) {
 	    	//?
   		}
-  	    if(e.getSource() == buttonVaraa1) {
-	    	//helsinki
-  	    	user.setVaraus("Helsinki");
-	    }
-  	    if(e.getSource() == buttonVaraa2) {
-	    	//turku
-  	    	user.setVaraus("Turku");
-  	    }
-  	    if(e.getSource() == buttonVaraa3) {
-	    	//tampere
-  	    	user.setVaraus("Tampere");
-  	    }
+  	    
+  	    if(e.getSource() == hyvaksyButton) {
+  	    	leftPanel.remove(kohdeBox);
+  	    	leftPanel.remove(kellonaikaBox);
+  	    	leftPanel.remove(paivamaaraBox1);
+  	    	leftPanel.remove(paivamaaraBox2);
+  	    	user.setVaraus((String) kohdeBox.getSelectedItem() + ";" + (String) kellonaikaBox.getSelectedItem() + ";" + (String) paivamaaraBox1.getSelectedItem() +  ";" + (String) paivamaaraBox2.getSelectedItem() + ";");
+  	    	clearButtons();
+  	    	makeButtonLP(varausButton);
+  	    	makeButtonLP(varaukseniButton);
+  	    	makeButtonLP(button3);
+  	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
+		}
+  	  	if(e.getSource() == peruButton) {
+  	  		leftPanel.remove(kohdeBox);
+  	  		leftPanel.remove(kellonaikaBox);
+  	  		leftPanel.remove(paivamaaraBox1);
+	    	leftPanel.remove(paivamaaraBox2);
+	    	clearButtons();
+	    	makeButtonLP(varausButton);
+  	    	makeButtonLP(varaukseniButton);
+  	    	makeButtonLP(button3);
+  	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
+  		}
+  	    
+  	    
   	    if(e.getSource() == buttonTakaisin) {
 	    	clearButtons();
   	    	makeButtonLP(varausButton);
@@ -315,5 +356,7 @@ public class TrainBookingService {
   	    }  	  
   	}
   	}
+  	
+  
   	
 }
