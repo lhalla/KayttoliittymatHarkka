@@ -45,6 +45,7 @@ public class User implements Serializable
 	//can't copy into/from a null user
 	public void copy(User other)
 	{
+		if(other==null){other = new User("","");}
 		this.username = other.username;
 		this.password = other.password;
 		this.address = other.address;
