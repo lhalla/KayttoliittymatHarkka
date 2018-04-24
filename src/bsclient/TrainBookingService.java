@@ -209,10 +209,16 @@ public class TrainBookingService {
     		KaikkiVaraukset.append(user.getVaraukset().get(i));
     		KaikkiVaraukset.append("\n");
     	}
+    	image.setFont(new Font("Tahoma", Font.BOLD,24));
     	image.setText(user.getUsername() + ", Sinun varauksesi lukevat tässä: " + KaikkiVaraukset.toString());
     	
-    	
-    	
+    	centerPanel.setBackground(Color.BLACK);
+    	image.setForeground (Color.green);
+    }
+    private void lompakkoMetodi(){
+    	image.setIcon(null);
+    	image.setFont(new Font("Tahoma", Font.BOLD,24));
+    	image.setText("You have no dollar(s), you are currently: poor");
     	centerPanel.setBackground(Color.BLACK);
     	image.setForeground (Color.green);
     }
@@ -250,7 +256,10 @@ public class TrainBookingService {
   	    }
   	    if(e.getSource() == button3) {
   	    	//lompakko
-  	    	
+  	    	inSecondScreen=true;
+  	    	clearButtons();
+  	    	makeButtonLP(buttonTakaisin);
+  	    	lompakkoMetodi();
 	    }
   	    if(e.getSource() == button4) {
   	    	//?
@@ -281,15 +290,15 @@ public class TrainBookingService {
   		}
   	    if(e.getSource() == buttonVaraa1) {
 	    	//helsinki
-  	    	//user.varaukset.add("Helsinki");
+  	    	user.setVaraus("Helsinki");
 	    }
   	    if(e.getSource() == buttonVaraa2) {
 	    	//turku
-  	    	//user.varaukset.add("Turku");
+  	    	user.setVaraus("Turku");
   	    }
   	    if(e.getSource() == buttonVaraa3) {
 	    	//tampere
-  	    	//user.varaukset.add("Tampere");
+  	    	user.setVaraus("Tampere");
   	    }
   	    if(e.getSource() == buttonTakaisin) {
 	    	clearButtons();
