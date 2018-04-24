@@ -15,9 +15,8 @@ public class ClientGUI extends JFrame
 	
 	private ClientLoginPrompt loginPrompt;	// login prompt used at startup
 	protected Client client;	// the client this clientGUI is tied to.
-	protected User user;
-	protected static String username;
-	protected static ArrayList<String> varaukset;
+	protected User user=new User("","");
+	
 	/**
 	 * Constructor.
 	 */
@@ -41,6 +40,8 @@ public class ClientGUI extends JFrame
                 System.exit(0);  
             }  
         });
+        
+        
     }
 
     /**
@@ -55,7 +56,7 @@ public class ClientGUI extends JFrame
             public void run()
             {            	
                 JFrame frame = new ClientGUI();
-                TrainBookingService service= new TrainBookingService(frame,username,varaukset);
+                TrainBookingService service= new TrainBookingService(frame,((ClientGUI)frame).user);
                 
                 frame = service.makeWindow();
                 frame.setTitle("Train Booking Service");

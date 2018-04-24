@@ -39,6 +39,8 @@ public class User implements Serializable
 	
 	public void setVaraukset(ArrayList<String> varaukset) { this.varaukset=varaukset; }
 	
+	
+	//can't copy into/from a null user
 	public void copy(User other)
 	{
 		this.username = other.username;

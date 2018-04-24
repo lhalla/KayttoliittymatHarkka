@@ -24,11 +24,13 @@ import messages.*;
  
 
 public class TrainBookingService {
+	
+	private User user=new User("","");
 
 	private boolean isAdmin;
 	
-	private String username;
-	private ArrayList<String> varaukset;
+	
+	
 
     private JFrame frame;
 
@@ -72,11 +74,11 @@ public class TrainBookingService {
     private JButton buttonTakaisin = new JButton("TAKAISIN");
     
     
-    public TrainBookingService(JFrame frame, String username, ArrayList<String> varaukset) {
-    	this.username=username;
+    public TrainBookingService(JFrame frame, User user) {
     	this.frame=frame;
-    	this.varaukset=varaukset;
-    	if(username.equals("admin")){
+    	this.user.copy(user);
+    	System.out.println(user.getUsername());
+    	if(user.getUsername().equals("admin")){
     		isAdmin=true;
     	}
     	else{
@@ -203,11 +205,11 @@ public class TrainBookingService {
     	image.setIcon(null);
     	StringBuilder KaikkiVaraukset = new StringBuilder();
     	KaikkiVaraukset.append("\n");
-    	for(int i=0;i<varaukset.size();i++){
-    		KaikkiVaraukset.append(varaukset.get(i));
+    	for(int i=0;i<user.getVaraukset().size();i++){
+    		KaikkiVaraukset.append(user.getVaraukset().get(i));
     		KaikkiVaraukset.append("\n");
     	}
-    	image.setText(username + ", Sinun varauksesi lukevat tässä: " + KaikkiVaraukset.toString());
+    	image.setText(user.getUsername() + ", Sinun varauksesi lukevat tässä: " + KaikkiVaraukset.toString());
     	
     	
     	
@@ -221,7 +223,7 @@ public class TrainBookingService {
     }
     
     protected ArrayList<String> getVaraukset(){
-    	return varaukset;
+    	return user.getVaraukset();
     }
     
    
@@ -279,15 +281,15 @@ public class TrainBookingService {
   		}
   	    if(e.getSource() == buttonVaraa1) {
 	    	//helsinki
-  	    	varaukset.add("Helsinki");
+  	    	//user.varaukset.add("Helsinki");
 	    }
   	    if(e.getSource() == buttonVaraa2) {
 	    	//turku
-  	    	varaukset.add("Turku");
+  	    	//user.varaukset.add("Turku");
   	    }
   	    if(e.getSource() == buttonVaraa3) {
 	    	//tampere
-  	    	varaukset.add("Tampere");
+  	    	//user.varaukset.add("Tampere");
   	    }
   	    if(e.getSource() == buttonTakaisin) {
 	    	clearButtons();

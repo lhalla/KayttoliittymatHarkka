@@ -3,6 +3,7 @@ package bsclient;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import bsshared.*;
 
 public class ClientLoginPrompt extends JDialog implements ActionListener
 {
@@ -21,6 +22,8 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
     private final JButton buttonCancel = new JButton("Cancel");
 
     private final JLabel labelStatus = new JLabel(" ");
+    
+    
     
     private Client client;
 
@@ -127,9 +130,7 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
     		if (res)
     		{
     			((ClientGUI) owner).client = client;
-			((ClientGUI) owner).user = client.user;
-    			((ClientGUI) owner).username = client.user.getUsername();
-    			((ClientGUI) owner).varaukset = client.user.getVaraukset();
+    			((ClientGUI) owner).user.copy(client.user);
     			owner.setVisible(true);
     			setVisible(false);
     		}
