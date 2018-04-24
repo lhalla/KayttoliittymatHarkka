@@ -52,20 +52,20 @@ public class TrainBookingService {
     private JLabel image = new JLabel();
 
     //buttons here
-    private JButton button1 = new JButton("VARAA");
-    private JButton button2 = new JButton("VARAUKSENI");
-    private JButton button3 = new JButton("?");
+    private JButton varausButton = new JButton("VARAA");
+    private JButton varaukseniButton = new JButton("VARAUKSENI");
+    private JButton button3 = new JButton("LOMPAKKO");
     
     private JButton button4 = new JButton("?");
-    private JButton button5 = new JButton("Admin-ASETUKSET");
+    private JButton adminAsetuksetButton = new JButton("Admin-ASETUKSET");
     
-    private JButton button6 = new JButton("POISTU");
+    private JButton poistuButton = new JButton("POISTU");
     
     private JButton button7 = new JButton("?");
     
-    private JButton button8 = new JButton("ASETUKSET");
-    private JButton button9 = new JButton("PERU VARAUKSENI");
-    private JButton button10 = new JButton("?");
+    private JButton asetuksetButton = new JButton("ASETUKSET");
+    private JButton peruVarauksetButton = new JButton("PERU VARAUKSENI");
+    private JButton buttonA = new JButton("?");
     
     private JButton buttonVaraa1 = new JButton("matka helsinkiin");
     private JButton buttonVaraa2 = new JButton("matka turkuun");
@@ -124,19 +124,19 @@ public class TrainBookingService {
     
     //addbuttons and labels here
     centerPanel.add(image);
-    makeButtonLP(button1);
-    makeButtonLP(button2);
+    makeButtonLP(varausButton);
+    makeButtonLP(varaukseniButton);
     makeButtonLP(button3);
     //topPanel
     if(isAdmin){
     makeButtonTP(button4);
-    makeButtonTP(button5);
+    makeButtonTP(adminAsetuksetButton);
     }
     else{
     makeButtonTP(button7);
-    makeButtonTP(button8);	
+    makeButtonTP(asetuksetButton);	
     }
-    makeButtonTP(button6);
+    makeButtonTP(poistuButton);
     
     
     frame.add(centerPanel, BorderLayout.CENTER);
@@ -233,7 +233,7 @@ public class TrainBookingService {
   //each button press creates an action
   	private class ButtonListener implements ActionListener{
   	    public void actionPerformed(ActionEvent e) {
-  	    if(e.getSource() == button1) {
+  	    if(e.getSource() == varausButton) {
   	    	//varaa
   	    	clearButtons();
   	    	makeButtonLP(buttonVaraa1);
@@ -241,7 +241,7 @@ public class TrainBookingService {
   	    	makeButtonLP(buttonVaraa3);
   	    	makeButtonLP(buttonTakaisin);
   	    }
-  	    if(e.getSource() == button2) {
+  	    if(e.getSource() == varaukseniButton) {
   	    	//varaukset
   	    	inSecondScreen=true;
   	    	clearButtons();
@@ -249,34 +249,34 @@ public class TrainBookingService {
   	    	varauksetMetodi();
   	    }
   	    if(e.getSource() == button3) {
-  	    	//?
+  	    	//lompakko
   	    	
 	    }
   	    if(e.getSource() == button4) {
   	    	//?
 	    }
-  	    if(e.getSource() == button5) {
+  	    if(e.getSource() == adminAsetuksetButton) {
   	    	//admin asetukset
 	    }
-  	    if(e.getSource() == button6) {
+  	    if(e.getSource() == poistuButton) {
   	    	//logout
   	    	
 	    }
   	  	if(e.getSource() == button7) {
 	    	//?
   		}
-  		if(e.getSource() == button8) {
+  		if(e.getSource() == asetuksetButton) {
 	    	//asetukset
   			clearButtons();
-  			makeButtonLP(button9);
-  			makeButtonLP(button10);
+  			makeButtonLP(peruVarauksetButton);
+  			makeButtonLP(buttonA);
   			makeButtonLP(buttonTakaisin);
   			
   		}
-  		if(e.getSource() == button9) {
+  		if(e.getSource() == peruVarauksetButton) {
 	    	//?
   		}
-  		if(e.getSource() == button10) {
+  		if(e.getSource() == buttonA) {
 	    	//?
   		}
   	    if(e.getSource() == buttonVaraa1) {
@@ -293,8 +293,8 @@ public class TrainBookingService {
   	    }
   	    if(e.getSource() == buttonTakaisin) {
 	    	clearButtons();
-  	    	makeButtonLP(button1);
-  	    	makeButtonLP(button2);
+  	    	makeButtonLP(varausButton);
+  	    	makeButtonLP(varaukseniButton);
   	    	makeButtonLP(button3);
   	    	if(inSecondScreen){
   	    		image.setText(null);
