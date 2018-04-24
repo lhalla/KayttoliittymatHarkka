@@ -80,11 +80,17 @@ public class Client
 			streamOut.writeObject(user);
 			streamOut.flush();
 			boolean res = streamIn.readBoolean();
+			if (res)
+				user = (User)streamIn.readObject();
+			cgui.user = user;
 			return res;
 		}
 		catch (IOException ioe)
 		{
 			System.err.println("Exception when trying to send User object.");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -146,7 +152,8 @@ public class Client
 		{
 			try
 			{
-				updateUser();
+				if (user != null)
+					updateUser();
 				streamOut.writeObject(new Logout());
 				streamOut.flush();
 				
