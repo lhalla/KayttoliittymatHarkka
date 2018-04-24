@@ -15,7 +15,7 @@ public class ClientGUI extends JFrame
 	
 	private ClientLoginPrompt loginPrompt;	// login prompt used at startup
 	protected Client client;	// the client this clientGUI is tied to.
-	protected User user=new User("","");
+	protected User user;
 	
 	/**
 	 * Constructor.

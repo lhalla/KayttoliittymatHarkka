@@ -146,7 +146,8 @@ public class Client
 		{
 			try
 			{
-				updateUser();
+				if (user != null)
+					updateUser();
 				streamOut.writeObject(new Logout());
 				streamOut.flush();
 				
