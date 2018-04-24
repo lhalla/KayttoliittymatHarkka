@@ -72,7 +72,11 @@ public class ClientThread extends Thread
 						streamOut.writeBoolean(res);
 						streamOut.flush();
 						if (res)
+						{
+							streamOut.writeObject(user);
+							streamOut.flush();
 							break;
+						}
 					}
 					else
 					{
@@ -116,6 +120,8 @@ public class ClientThread extends Thread
 						
 						// Send a positive response (valid credentials) and break out of LOOP0.
 						streamOut.writeBoolean(true);
+						streamOut.flush();
+						streamOut.writeObject(user);
 						streamOut.flush();
 						break;
 					}

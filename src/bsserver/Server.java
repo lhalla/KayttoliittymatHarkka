@@ -157,9 +157,15 @@ public class Server
 	
 	synchronized protected boolean updateUser(User user, UserUpdate uuMessage)
 	{
-		boolean res = users.remove(user);
+		boolean res = users.contains(user);
 		
 		if (!res) return res;
+		
+		for (User u : users)
+		{
+			if (u.equals(user))
+				users.remove(u);
+		}
 		
 		User updUser = new User();
 		updUser.copy(uuMessage.getUser());
@@ -174,6 +180,22 @@ public class Server
 		}
 		
 		return true;
+	}
+	
+	protected User findUser(String username)
+	{
+		User foundUser = null;
+		
+		for (User u : users)
+		{
+			if (u.getUsername().equals(username))
+			{
+				foundUser = u;
+				break;
+			}
+		}
+		
+		return foundUser;
 	}
 	
 	/**
