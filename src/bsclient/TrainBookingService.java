@@ -45,7 +45,7 @@ public class TrainBookingService {
     
     private ButtonListener bl;
     private ArrayList<JButton> ButtonList = new ArrayList<JButton>();
-    
+    private ArrayList<JLabel> TextList = new ArrayList<JLabel>();
     
     //panels here
     //!paneeleissa ei saa k√§ytt√§√§ boxlayout
@@ -53,14 +53,16 @@ public class TrainBookingService {
     private JPanel leftPanel = new JPanel();
     private JPanel topPanel = new JPanel();
     private JPanel centerPanel = new JPanel();
+    
+    
     private JLabel image = new JLabel();
 
     //buttons here
     private JButton varausButton = new JButton("VARAA");
     private JButton varaukseniButton = new JButton("VARAUKSENI");
-    private JButton button3 = new JButton("LOMPAKKO");
+    private JButton lompakkoButton = new JButton("LOMPAKKO");
     
-    private JButton button4 = new JButton("?");
+    private JButton adminJunaAsetuksetButton = new JButton("Juna-ASETUKSET");
     private JButton adminAsetuksetButton = new JButton("Admin-ASETUKSET");
     
     private JButton poistuButton = new JButton("POISTU");
@@ -71,9 +73,9 @@ public class TrainBookingService {
     private JButton peruVarauksetButton = new JButton("PERU VARAUKSENI");
     private JButton buttonA = new JButton("?");
     
-//    private JButton buttonVaraa1 = new JButton("matka helsinkiin");
-//    private JButton buttonVaraa2 = new JButton("matka turkuun");
-//    private JButton buttonVaraa3 = new JButton("matka tampereelle");
+    private JButton addFunds5 = new JButton("Lis‰‰ 5e");
+    private JButton addFunds25 = new JButton("Lis‰‰ 25e");
+    private JButton addFunds100 = new JButton("Lis‰‰ 100e");
     
     private JButton hyvaksyButton = new JButton("Hyvaksy");
     private JButton peruButton = new JButton("Peru");
@@ -83,7 +85,8 @@ public class TrainBookingService {
     private JComboBox<String> paivamaaraBox1;
     private JComboBox<String> paivamaaraBox2;
     private JComboBox<String> kellonaikaBox;
-    private JComboBox<String> kohdeBox;
+    private JComboBox<String> minneBox;
+    private JComboBox<String> mistaBox;
     
     private JButton buttonTakaisin = new JButton("TAKAISIN");
     
@@ -91,7 +94,6 @@ public class TrainBookingService {
     public TrainBookingService(JFrame frame, User user) {
     	this.frame=frame;
     	this.user.copy(user);
-    	System.out.println(user.getUsername());
     	if(user.getUsername().equals("admin")){
     		isAdmin=true;
     	}
@@ -106,6 +108,7 @@ public class TrainBookingService {
     
     GridLayout gridLeft = new GridLayout(8,1);
     GridLayout gridTop = new GridLayout(1,5);
+    GridLayout gridMid = new GridLayout(0,1);
     frame.setSize(5*basewidth, 5*baseheight-baseheight/2);
     frame.setResizable(false);
 
@@ -125,6 +128,7 @@ public class TrainBookingService {
 
     centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     centerPanel.setBackground(Color.WHITE);
+    centerPanel.setLayout(gridMid);
     centerPanel.setMaximumSize(new Dimension(4*basewidth,4*baseheight));
     centerPanel.setMinimumSize(new Dimension(4*basewidth,4*baseheight));
     
@@ -140,10 +144,10 @@ public class TrainBookingService {
     centerPanel.add(image);
     makeButtonLP(varausButton);
     makeButtonLP(varaukseniButton);
-    makeButtonLP(button3);
+    makeButtonLP(lompakkoButton);
     //topPanel
     if(isAdmin){
-    makeButtonTP(button4);
+    makeButtonTP(adminJunaAsetuksetButton);
     makeButtonTP(adminAsetuksetButton);
     }
     else{
@@ -175,7 +179,7 @@ public class TrainBookingService {
     //these initialize the buttons
     private void makeButtonLP(JButton button){
     	button.setBackground(new Color(50, 200, 45));
-    	if(button == buttonTakaisin)button.setBackground(Color.RED);
+    	if(button == buttonTakaisin || button==peruButton)button.setBackground(Color.RED);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
         button.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -216,41 +220,47 @@ public class TrainBookingService {
     
     
     private void varauksetMetodi(){
-    	image.setIcon(null);
-    	StringBuilder KaikkiVaraukset = new StringBuilder();
-    	KaikkiVaraukset.append("\n");
+    	centerPanel.remove(image);
     	for(int i=0;i<user.getVaraukset().size();i++){
-    		KaikkiVaraukset.append(user.getVaraukset().get(i));
-    		KaikkiVaraukset.append("\n");
+    		TextList.add(new JLabel());
+    		TextList.get(i).setText("                                                                      " + user.getVaraukset().get(i));
+    		TextList.get(i).setFont(new Font("Tahoma", Font.BOLD,12));
+    		TextList.get(i).setForeground(Color.BLACK);
+    		centerPanel.add(TextList.get(i));
     	}
-    	image.setFont(new Font("Tahoma", Font.BOLD,12));
-    	image.setText(user.getUsername() + ", Sinun varauksesi lukevat t√§ss√§: " + KaikkiVaraukset.toString());
     	
-    	centerPanel.setBackground(Color.BLACK);
-    	image.setForeground (Color.green);
+    	centerPanel.setBackground(new Color(127,235,255));
     }
     private void lompakkoMetodi(){
-    	image.setIcon(null);
-    	image.setFont(new Font("Tahoma", Font.BOLD,24));
-    	image.setText("You have no dollar(s), you are currently: poor");
-    	centerPanel.setBackground(Color.BLACK);
-    	image.setForeground (Color.green);
+    	centerPanel.remove(image);
+    	TextList.add(new JLabel());
+    	TextList.get(0).setText("           Wallet: " + user.getLompakko() + "e");
+    	TextList.get(0).setFont(new Font("Tahoma", Font.BOLD,40));
+    	TextList.get(0).setForeground(Color.BLACK);
+    	centerPanel.add(TextList.get(0));
+    	centerPanel.setBackground(new Color(255,216,132));
+    	makeButtonLP(addFunds5);
+    	makeButtonLP(addFunds25);
+    	makeButtonLP(addFunds100);
     }
     private void asetuksetMetodi(){
-    	image.setIcon(null);
+    	centerPanel.remove(image);
     	
     	
     }
     private void varausMetodi(){
-    	String[] kohde= new String[]{"Helsinki","Turku","Tampere"};
+    	String[] lahto= new String[]{"Helsingist‰","Turusta","Tampereelta"};
+    	String[] kohde= new String[]{"Helsinkiin","Turkuun","Tampereelle"};
     	String[] kellonaika= new String[]{"klo 8","klo 10","klo 12","klo 14","klo 20","klo 24"};
-    	String[] paivamaara= new String[]{"1.","2.","3.","4.","5.","6."};
-    	String[] kuukausi= new String[]{"tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kes‰kuu"};
-    	kohdeBox= new JComboBox<>(kohde);
+    	String[] paivamaara= new String[]{"1.","2.","3.","4.","5.","6.","7.","8.","9.","10.","11.","12.","13.","14.","15.","16.","17.","18.","19.","20.","21.","22.","23.","24.","25.","26.","27.","28.","29.","30.","31"};
+    	String[] kuukausi= new String[]{"tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kes‰kuu","hein‰kuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu"};
+    	mistaBox= new JComboBox<>(lahto);
+    	minneBox= new JComboBox<>(kohde);
     	kellonaikaBox= new JComboBox<>(kellonaika);
     	paivamaaraBox1= new JComboBox<>(paivamaara);
     	paivamaaraBox2= new JComboBox<>(kuukausi);
-    	leftPanel.add(kohdeBox);
+    	leftPanel.add(mistaBox);
+    	leftPanel.add(minneBox);
     	leftPanel.add(kellonaikaBox);
     	leftPanel.add(paivamaaraBox1);
     	leftPanel.add(paivamaaraBox2);
@@ -281,15 +291,15 @@ public class TrainBookingService {
   	    	makeButtonLP(buttonTakaisin);
   	    	varauksetMetodi();
   	    }
-  	    if(e.getSource() == button3) {
+  	    if(e.getSource() == lompakkoButton) {
   	    	//lompakko
   	    	inSecondScreen=true;
   	    	clearButtons();
   	    	makeButtonLP(buttonTakaisin);
   	    	lompakkoMetodi();
 	    }
-  	    if(e.getSource() == button4) {
-  	    	//?
+  	    if(e.getSource() == adminJunaAsetuksetButton) {
+  	    	//Juna asetukset
 	    }
   	    if(e.getSource() == adminAsetuksetButton) {
   	    	//admin asetukset
@@ -312,31 +322,44 @@ public class TrainBookingService {
   		if(e.getSource() == peruVarauksetButton) {
 	    	//?
   		}
-  		if(e.getSource() == buttonA) {
-	    	//?
+  		if(e.getSource() == addFunds5) {
+	    	user.addMoney(5.0);
+	    	TextList.get(0).setText("           Wallet: " + user.getLompakko() + "e");
+  		}
+  		if(e.getSource() == addFunds25) {
+  			user.addMoney(25.0);
+  			TextList.get(0).setText("           Wallet: " + user.getLompakko() + "e");
+  		}
+  		if(e.getSource() == addFunds100) {
+  			user.addMoney(100.0);
+  			TextList.get(0).setText("           Wallet: " + user.getLompakko() + "e");
   		}
   	    
   	    if(e.getSource() == hyvaksyButton) {
-  	    	leftPanel.remove(kohdeBox);
+  	    	leftPanel.remove(mistaBox);
+  	    	leftPanel.remove(minneBox);
   	    	leftPanel.remove(kellonaikaBox);
   	    	leftPanel.remove(paivamaaraBox1);
   	    	leftPanel.remove(paivamaaraBox2);
-  	    	user.setVaraus((String) kohdeBox.getSelectedItem() + ";" + (String) kellonaikaBox.getSelectedItem() + ";" + (String) paivamaaraBox1.getSelectedItem() +  ";" + (String) paivamaaraBox2.getSelectedItem() + ";");
+  	    	user.setVaraus((String) mistaBox.getSelectedItem() + " ; " +(String) minneBox.getSelectedItem() + " ; " + (String) kellonaikaBox.getSelectedItem() + " ; " + (String) paivamaaraBox1.getSelectedItem() +  " ; " + (String) paivamaaraBox2.getSelectedItem() + " ; ");
   	    	clearButtons();
   	    	makeButtonLP(varausButton);
   	    	makeButtonLP(varaukseniButton);
-  	    	makeButtonLP(button3);
+  	    	makeButtonLP(lompakkoButton);
+  	    	centerPanel.add(image);
   	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
 		}
   	  	if(e.getSource() == peruButton) {
-  	  		leftPanel.remove(kohdeBox);
+  	  		leftPanel.remove(mistaBox);
+  	  		leftPanel.remove(minneBox);
   	  		leftPanel.remove(kellonaikaBox);
   	  		leftPanel.remove(paivamaaraBox1);
 	    	leftPanel.remove(paivamaaraBox2);
 	    	clearButtons();
 	    	makeButtonLP(varausButton);
   	    	makeButtonLP(varaukseniButton);
-  	    	makeButtonLP(button3);
+  	    	makeButtonLP(lompakkoButton);
+  	    	centerPanel.add(image);
   	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
   		}
   	    
@@ -345,9 +368,13 @@ public class TrainBookingService {
 	    	clearButtons();
   	    	makeButtonLP(varausButton);
   	    	makeButtonLP(varaukseniButton);
-  	    	makeButtonLP(button3);
+  	    	makeButtonLP(lompakkoButton);
   	    	if(inSecondScreen){
-  	    		image.setText(null);
+  	    		for(int j=0;j<TextList.size();j++){
+  	    			centerPanel.remove(TextList.get(j));
+  	    		}
+  	    		TextList.clear();
+  	    		centerPanel.add(image);
   	    		image.setForeground(Color.WHITE);
   	    		centerPanel.setBackground(Color.WHITE);
   	    		inSecondScreen=false;

@@ -145,7 +145,7 @@ public class Client
 		boolean logOutFromLoginScreen = true;
 		if(user != null){
 			logOutFromLoginScreen=false;
-			System.out.println("logging out, user varaukset:" + user.getVaraukset());
+			System.out.println("logging out," + user.getUsername() + " varaukset:" + user.getVaraukset());
 		}
 		
 		if (socket != null && !socket.isClosed())

@@ -11,6 +11,7 @@ public class User implements Serializable
 	protected String address;
 	protected String ccNumber;
 	protected ArrayList<String> varaukset;
+	protected double lompakko;
 	
 	public User() { this("",""); }
 	
@@ -20,6 +21,7 @@ public class User implements Serializable
 		this.password = password;
 		this.address = "";
 		this.ccNumber = "";
+		this.lompakko = 0.0;
 		this.varaukset = new ArrayList<String>();
 	}
 	
@@ -30,12 +32,24 @@ public class User implements Serializable
 	
 	public String getCCNumber() { return ccNumber; }
 	
+	public double getLompakko(){ return lompakko;}
+	
 	public ArrayList<String> getVaraukset() { return varaukset; }
 	
 	// Setters
 	public void setAddress(String address) { this.address = address; }
 	
 	public void setCCNumber(String ccNumber) { this.ccNumber = ccNumber; }
+	
+	public void addMoney(double money){this.lompakko += money;}
+	
+	public boolean removeMoney(double money){
+		if(this.lompakko>=money){
+			this.lompakko -= money;
+			return true;
+		}
+		else return false;
+	}
 	
 	public void setVaraukset(ArrayList<String> varaukset) { this.varaukset=varaukset; }
 	
