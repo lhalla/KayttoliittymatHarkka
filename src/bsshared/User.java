@@ -53,6 +53,8 @@ public class User implements Serializable
 	
 	public void setVaraukset(ArrayList<String> varaukset) { this.varaukset=varaukset; }
 	
+	public void clearVaraukset(){ this.varaukset.clear();}
+	
 	public void setVaraus(String varaus){this.varaukset.add(varaus);}
 	
 	

@@ -34,7 +34,6 @@ public class TrainBookingService {
 	private boolean isAdmin;
 	
 	
-	
 
     private JFrame frame;
 
@@ -71,7 +70,9 @@ public class TrainBookingService {
     
     private JButton asetuksetButton = new JButton("ASETUKSET");
     private JButton peruVarauksetButton = new JButton("PERU VARAUKSENI");
-    private JButton buttonA = new JButton("?");
+    private JButton buttonMuutaOsoite = new JButton("MUUTA OSOITE");
+    private JButton buttonMuutaCCNumber = new JButton("MUUTA CCNum");
+    private JButton buttonMuutaSalasana = new JButton("MUUTA Salasana");
     
     private JButton addFunds5 = new JButton("Lis‰‰ 5e");
     private JButton addFunds25 = new JButton("Lis‰‰ 25e");
@@ -251,7 +252,7 @@ public class TrainBookingService {
     private void varausMetodi(){
     	String[] lahto= new String[]{"Helsingist‰","Turusta","Tampereelta"};
     	String[] kohde= new String[]{"Helsinkiin","Turkuun","Tampereelle"};
-    	String[] kellonaika= new String[]{"klo 8","klo 10","klo 12","klo 14","klo 20","klo 24"};
+    	String[] kellonaika= new String[]{"klo 8","klo 10","klo 12","klo 14","klo 20","klo 21"};
     	String[] paivamaara= new String[]{"1.","2.","3.","4.","5.","6.","7.","8.","9.","10.","11.","12.","13.","14.","15.","16.","17.","18.","19.","20.","21.","22.","23.","24.","25.","26.","27.","28.","29.","30.","31"};
     	String[] kuukausi= new String[]{"tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kes‰kuu","hein‰kuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu"};
     	mistaBox= new JComboBox<>(lahto);
@@ -270,6 +271,30 @@ public class TrainBookingService {
     
     protected ArrayList<String> getVaraukset(){
     	return user.getVaraukset();
+    }
+    
+    private void removeTextAndButtonsAndReturn(){
+    	clearButtons();
+	    	makeButtonLP(varausButton);
+	    	makeButtonLP(varaukseniButton);
+	    	makeButtonLP(lompakkoButton);
+	    	if(inSecondScreen){
+	    		for(int j=0;j<TextList.size();j++){
+	    			centerPanel.remove(TextList.get(j));
+	    		}
+	    		TextList.clear();
+	    		centerPanel.add(image);
+	    		image.setForeground(Color.WHITE);
+	    		centerPanel.setBackground(Color.WHITE);
+	    		inSecondScreen=false;
+	    	}
+	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
+	    
+    }
+    private boolean confirm(){
+    	confirmScreen confirmer = new confirmScreen(frame);
+    	boolean confirm = confirmer.confirm("text here");
+    	return confirm;
     }
     
    
@@ -295,8 +320,8 @@ public class TrainBookingService {
   	    	//lompakko
   	    	inSecondScreen=true;
   	    	clearButtons();
-  	    	makeButtonLP(buttonTakaisin);
   	    	lompakkoMetodi();
+  	    	makeButtonLP(buttonTakaisin);
 	    }
   	    if(e.getSource() == adminJunaAsetuksetButton) {
   	    	//Juna asetukset
@@ -315,12 +340,15 @@ public class TrainBookingService {
 	    	//asetukset
   			clearButtons();
   			makeButtonLP(peruVarauksetButton);
-  			makeButtonLP(buttonA);
+  			makeButtonLP(buttonMuutaOsoite);
+  			makeButtonLP(buttonMuutaCCNumber);
+  			makeButtonLP(buttonMuutaSalasana);
   			makeButtonLP(buttonTakaisin);
   			
   		}
   		if(e.getSource() == peruVarauksetButton) {
-	    	//?
+  			//lis‰‰ t‰h‰n rahantakaisinsaanti
+	    	user.clearVaraukset();
   		}
   		if(e.getSource() == addFunds5) {
 	    	user.addMoney(5.0);
@@ -336,18 +364,16 @@ public class TrainBookingService {
   		}
   	    
   	    if(e.getSource() == hyvaksyButton) {
+  	    	if(confirm()){
   	    	leftPanel.remove(mistaBox);
   	    	leftPanel.remove(minneBox);
   	    	leftPanel.remove(kellonaikaBox);
   	    	leftPanel.remove(paivamaaraBox1);
   	    	leftPanel.remove(paivamaaraBox2);
   	    	user.setVaraus((String) mistaBox.getSelectedItem() + " ; " +(String) minneBox.getSelectedItem() + " ; " + (String) kellonaikaBox.getSelectedItem() + " ; " + (String) paivamaaraBox1.getSelectedItem() +  " ; " + (String) paivamaaraBox2.getSelectedItem() + " ; ");
-  	    	clearButtons();
-  	    	makeButtonLP(varausButton);
-  	    	makeButtonLP(varaukseniButton);
-  	    	makeButtonLP(lompakkoButton);
-  	    	centerPanel.add(image);
-  	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
+  	    	removeTextAndButtonsAndReturn();
+  	    	}
+  	    	
 		}
   	  	if(e.getSource() == peruButton) {
   	  		leftPanel.remove(mistaBox);
@@ -355,35 +381,15 @@ public class TrainBookingService {
   	  		leftPanel.remove(kellonaikaBox);
   	  		leftPanel.remove(paivamaaraBox1);
 	    	leftPanel.remove(paivamaaraBox2);
-	    	clearButtons();
-	    	makeButtonLP(varausButton);
-  	    	makeButtonLP(varaukseniButton);
-  	    	makeButtonLP(lompakkoButton);
-  	    	centerPanel.add(image);
-  	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
+	    	removeTextAndButtonsAndReturn();
   		}
   	    
   	    
   	    if(e.getSource() == buttonTakaisin) {
-	    	clearButtons();
-  	    	makeButtonLP(varausButton);
-  	    	makeButtonLP(varaukseniButton);
-  	    	makeButtonLP(lompakkoButton);
-  	    	if(inSecondScreen){
-  	    		for(int j=0;j<TextList.size();j++){
-  	    			centerPanel.remove(TextList.get(j));
-  	    		}
-  	    		TextList.clear();
-  	    		centerPanel.add(image);
-  	    		image.setForeground(Color.WHITE);
-  	    		centerPanel.setBackground(Color.WHITE);
-  	    		inSecondScreen=false;
-  	    	}
-  	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
-  	    }  	  
+  	    	removeTextAndButtonsAndReturn();
+  	    }
+  	   }
   	}
-  	}
-  	
   
   	
 }
