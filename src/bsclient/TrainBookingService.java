@@ -293,10 +293,22 @@ public class TrainBookingService {
     }
     private boolean confirm(){
     	confirmScreen confirmer = new confirmScreen(frame);
-    	boolean confirm = confirmer.confirm("text here");
+    	double price = calcPrice();
+    	boolean canAfford = user.canAfford(price);
+    	boolean confirm = confirmer.confirm("Olet menossa " +  (String) mistaBox.getSelectedItem() + " " + (String) minneBox.getSelectedItem() + " " + (String) kellonaikaBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() + (String) paivamaaraBox2.getSelectedItem() + "ta", "Hinta: " + price + "e", canAfford);
     	return confirm;
     }
-    
+    private Double calcPrice(){
+    	String leave = (String) mistaBox.getSelectedItem();
+    	String dest= (String) minneBox.getSelectedItem();
+    	if(leave == dest){
+    		return 0.0;
+    	}
+    	if(leave == "Tampereelta" && dest == "Helsinkiin"){
+    		return 10.0;
+    	}
+    	return 5.0;
+    }
    
     
     
@@ -348,6 +360,9 @@ public class TrainBookingService {
   		}
   		if(e.getSource() == peruVarauksetButton) {
   			//lis‰‰ t‰h‰n rahantakaisinsaanti
+  			for(int j=0;j<user.getVaraukset().size();j++){
+  				user.addMoney(5.0);
+  			}
 	    	user.clearVaraukset();
   		}
   		if(e.getSource() == addFunds5) {
@@ -362,9 +377,19 @@ public class TrainBookingService {
   			user.addMoney(100.0);
   			TextList.get(0).setText("           Wallet: " + user.getLompakko() + "e");
   		}
+  		if(e.getSource() == buttonMuutaOsoite){
+  			
+  		}
+  		if(e.getSource() == buttonMuutaCCNumber){
+  			
+  		}
+		if(e.getSource() == buttonMuutaSalasana){
+		
+		}
   	    
   	    if(e.getSource() == hyvaksyButton) {
   	    	if(confirm()){
+  	    	user.removeMoney(calcPrice());
   	    	leftPanel.remove(mistaBox);
   	    	leftPanel.remove(minneBox);
   	    	leftPanel.remove(kellonaikaBox);

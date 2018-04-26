@@ -36,6 +36,10 @@ public class User implements Serializable
 	
 	public ArrayList<String> getVaraukset() { return varaukset; }
 	
+	public boolean canAfford(double money){
+		return this.lompakko>=money;
+	}
+	
 	// Setters
 	public void setAddress(String address) { this.address = address; }
 	
