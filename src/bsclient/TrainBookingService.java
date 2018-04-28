@@ -33,6 +33,7 @@ public class TrainBookingService {
 	
 	//List of trains and their properties
 	private ArrayList<Train> trainList = new ArrayList<Train>();
+	private Train chosenTrain;
 	
 	//cheks if user is admin
 	private boolean isAdmin;
@@ -218,6 +219,9 @@ public class TrainBookingService {
         	image.setIcon(new ImageIcon(stretchImage(new ImageIcon(new URL(URLforImage)).getImage())));
         	}catch(Exception e) {}
     }
+    protected ArrayList<String> getVaraukset(){
+    	return user.getVaraukset();
+    }
     
     //koravattava
     private void makeCustomTrains(){
@@ -279,9 +283,7 @@ public class TrainBookingService {
     	makeButtonLP(peruButton);
     }
     
-    protected ArrayList<String> getVaraukset(){
-    	return user.getVaraukset();
-    }
+    
     
     private void removeTextAndButtonsAndReturn(){
     	clearButtons();
@@ -301,6 +303,8 @@ public class TrainBookingService {
 	    	createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
 	    
     }
+    
+    //for paikanvaraus and confirmation screen
     private boolean confirm(){
     	confirmScreen confirmer = new confirmScreen(frame);
     	double price = calcPrice();
@@ -308,15 +312,28 @@ public class TrainBookingService {
     	boolean confirm = confirmer.confirm("Reitti: " + (String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() + (String) paivamaaraBox2.getSelectedItem() + "ta", "Hinta: " + price + "e", canAfford);
     	return confirm;
     }
-    private Double calcPrice(){
-    	
+    private TrainSeat varaaPaikka(){
+    	paikanVarausScreen paikanVaraaja = new paikanVarausScreen(frame,chosenTrain);
+    	TrainSeat varattuPaikka= paikanVaraaja.varaa();	
+    	return varattuPaikka;
+    }
+    
+    
+    
+    private Double calcPrice(){	
+    	return chosenTrain.getCost();
+    }
+    
+    private Train getChosenTrain(){
     	String junaReitti= (String) reittiBox.getSelectedItem();
     	for(int k=0;k<trainList.size();k++){
     		if(trainList.get(k).matchingReitti(junaReitti)){
-    			return trainList.get(k).getCost();
-    		}	
+    			return trainList.get(k);
+    		}
     	}
-    	return 0.0;
+    	Train noTrain = new Train();
+    	noTrain.setAvailability(false);
+    	return noTrain;
     }
    
     
@@ -397,13 +414,17 @@ public class TrainBookingService {
 		}
   	    
   	    if(e.getSource() == hyvaksyButton) {
-  	    	if(confirm()){
-  	    	user.removeMoney(calcPrice());
-  	    	leftPanel.remove(reittiBox);
-  	    	leftPanel.remove(paivamaaraBox1);
-  	    	leftPanel.remove(paivamaaraBox2);
-  	    	user.setVaraus((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() +  " " + (String) paivamaaraBox2.getSelectedItem() + " ; ");
-  	    	removeTextAndButtonsAndReturn();
+  	    	chosenTrain=getChosenTrain();
+  	    	TrainSeat chosenSeat = varaaPaikka();
+  	    	if(chosenSeat.paikkaOnOikeastiVarattu()){
+  	    		if(confirm()){
+  	    			user.removeMoney(calcPrice());
+  	    			leftPanel.remove(reittiBox);
+  	    			leftPanel.remove(paivamaaraBox1);
+  	    			leftPanel.remove(paivamaaraBox2);
+  	    			user.setVaraus((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() +  " " + (String) paivamaaraBox2.getSelectedItem() + " ; ");
+  	    			removeTextAndButtonsAndReturn();
+  	    		}
   	    	}
   	    	
 		}

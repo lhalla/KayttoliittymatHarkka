@@ -3,12 +3,14 @@ package bsshared;
 import java.util.ArrayList;
 
 public class Train {
+	public boolean Available;
 	public double cost;
 	public String name;
 	public String route;
 	public ArrayList<String> seats;
 
 	public Train() {
+		this.Available=true;
 		this.cost=5.0;
 		this.name="A001";
 		this.route="Helsinki-Turku klo 8-10";
@@ -26,6 +28,13 @@ public class Train {
 	public String getRoute(){
 		return route;
 	}
+	public boolean getAvailability(){
+		return Available;
+	}
+	//TODO: korjaa antamaan false jos paika täynnä
+	public boolean areSeatsLeft(){
+		return true;
+	}
 	
 	
 	public void setRoute(String from,String to,String when){
@@ -33,6 +42,9 @@ public class Train {
 	}
 	public void setCost(double cost){
 		this.cost=cost;
+	}
+	public void setAvailability(boolean available){
+		this.Available=available;
 	}
 
 }
