@@ -18,8 +18,9 @@ import javax.swing.WindowConstants;
 
 public class confirmScreen {
 
-	private JLabel text1 = new JLabel();
-	private JLabel text2 = new JLabel();
+	private JLabel RouteText = new JLabel();
+	private JLabel PriceText = new JLabel();
+	private JLabel textSeats = new JLabel();
 	private JButton confirmButton = new JButton("VAHVISTA");
 	private JButton cancelButton = new JButton("PERU");
 	JDialog dialog;
@@ -30,9 +31,9 @@ public class confirmScreen {
 	
 	public confirmScreen(Frame frame) {
 		dialog = new JDialog (frame, "Vahvista varaus");
-		dialog.setSize(500, 400);
+		dialog.setSize(500, 500);
 	}
-	public boolean confirm(String ScreenText1,String ScreenText2, boolean canAfford){
+	public boolean confirm(String ScreenRouteText,String ScreenPriceText, boolean canAfford){
 		dialog.setModal (true);
 		dialog.setAlwaysOnTop (true);
 		dialog.setModalityType (ModalityType.APPLICATION_MODAL);
@@ -42,13 +43,13 @@ public class confirmScreen {
 		mainPanel.setBackground(Color.WHITE);
 		dialog.add(mainPanel);
 		
-		text1.setText(ScreenText1);
-		text1.setFont(new Font("Tahoma", Font.BOLD, 12));
-		mainPanel.add(text1);
-		text2.setText(ScreenText2);
-		text2.setFont(new Font("Tahoma", Font.BOLD, 12));
-		if(!canAfford)text2.setForeground(Color.red);
-		mainPanel.add(text2);
+		RouteText.setText(ScreenRouteText);
+		RouteText.setFont(new Font("Tahoma", Font.BOLD, 12));
+		mainPanel.add(RouteText);
+		PriceText.setText(ScreenPriceText);
+		PriceText.setFont(new Font("Tahoma", Font.BOLD, 12));
+		if(!canAfford)PriceText.setForeground(Color.red);
+		mainPanel.add(PriceText);
 		
 		confirmButton.setBackground(new Color(50, 200, 45));
 		if(!canAfford)confirmButton.setBackground(Color.red);

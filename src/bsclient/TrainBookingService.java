@@ -30,7 +30,11 @@ import java.awt.event.ItemListener;
 public class TrainBookingService {
 	
 	private User user=new User("","");
-
+	
+	//List of trains and their properties
+	private ArrayList<Train> trainList = new ArrayList<Train>();
+	
+	//cheks if user is admin
 	private boolean isAdmin;
 	
 	
@@ -48,12 +52,11 @@ public class TrainBookingService {
     
     //panels here
     //!paneeleissa ei saa k√§ytt√§√§ boxlayout
-
     private JPanel leftPanel = new JPanel();
     private JPanel topPanel = new JPanel();
     private JPanel centerPanel = new JPanel();
     
-    
+    //JLabel keskipaneelin kuvalle
     private JLabel image = new JLabel();
 
     //buttons here
@@ -82,16 +85,14 @@ public class TrainBookingService {
     private JButton peruButton = new JButton("Peru");
     
   	
-    
+    //JComboBoxit junanvaraukselle
     private JComboBox<String> paivamaaraBox1;
     private JComboBox<String> paivamaaraBox2;
-    private JComboBox<String> kellonaikaBox;
-    private JComboBox<String> minneBox;
-    private JComboBox<String> mistaBox;
+    private JComboBox<String> reittiBox;
     
     private JButton buttonTakaisin = new JButton("TAKAISIN");
     
-    
+    //TODO: Pyyt‰‰ parametriksi trainListin, korvaa makeCustomTrains metodi
     public TrainBookingService(JFrame frame, User user) {
     	this.frame=frame;
     	this.user.copy(user);
@@ -101,6 +102,7 @@ public class TrainBookingService {
     	else{
     		isAdmin=false;
     	}
+    	makeCustomTrains();
     	}
 
     public JFrame makeWindow() {
@@ -126,7 +128,6 @@ public class TrainBookingService {
     topPanel.setMinimumSize(new Dimension(5*basewidth,baseheight/2));
 
     //centerpanel
-
     centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     centerPanel.setBackground(Color.WHITE);
     centerPanel.setLayout(gridMid);
@@ -177,7 +178,7 @@ public class TrainBookingService {
 	}
     
     
-    //these initialize the buttons
+    //these initialize the buttons or remove them
     private void makeButtonLP(JButton button){
     	button.setBackground(new Color(50, 200, 45));
     	if(button == buttonTakaisin || button==peruButton)button.setBackground(Color.RED);
@@ -218,7 +219,18 @@ public class TrainBookingService {
         	}catch(Exception e) {}
     }
     
-    
+    //koravattava
+    private void makeCustomTrains(){
+    	trainList.add(new Train());
+    	trainList.add(new Train());
+    	trainList.add(new Train());
+    	trainList.get(0).setRoute("Helsinki", "Tampere", "7-12");
+    	trainList.get(0).setCost(11.5);
+    	trainList.get(1).setRoute("Turku", "Tampere", "10-12");
+    	trainList.get(0).setCost(8.5);
+    	trainList.get(2).setRoute("Helsinki", "Turku", "19-23");
+    	
+    }
     
     private void varauksetMetodi(){
     	centerPanel.remove(image);
@@ -250,19 +262,17 @@ public class TrainBookingService {
     	
     }
     private void varausMetodi(){
-    	String[] lahto= new String[]{"Helsingist‰","Turusta","Tampereelta"};
-    	String[] kohde= new String[]{"Helsinkiin","Turkuun","Tampereelle"};
-    	String[] kellonaika= new String[]{"klo 8","klo 10","klo 12","klo 14","klo 20","klo 21"};
+    	//Comboboxit reittibox saavat arvonsa t‰st‰
+    	String[] reitti= new String[trainList.size()];
+    	for(int a=0;a<trainList.size();a++){
+    	reitti[a]=trainList.get(a).getRoute();
+    	}
     	String[] paivamaara= new String[]{"1.","2.","3.","4.","5.","6.","7.","8.","9.","10.","11.","12.","13.","14.","15.","16.","17.","18.","19.","20.","21.","22.","23.","24.","25.","26.","27.","28.","29.","30.","31"};
     	String[] kuukausi= new String[]{"tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kes‰kuu","hein‰kuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu"};
-    	mistaBox= new JComboBox<>(lahto);
-    	minneBox= new JComboBox<>(kohde);
-    	kellonaikaBox= new JComboBox<>(kellonaika);
+    	reittiBox= new JComboBox<>(reitti);
     	paivamaaraBox1= new JComboBox<>(paivamaara);
     	paivamaaraBox2= new JComboBox<>(kuukausi);
-    	leftPanel.add(mistaBox);
-    	leftPanel.add(minneBox);
-    	leftPanel.add(kellonaikaBox);
+    	leftPanel.add(reittiBox);
     	leftPanel.add(paivamaaraBox1);
     	leftPanel.add(paivamaaraBox2);
     	makeButtonLP(hyvaksyButton);
@@ -295,19 +305,18 @@ public class TrainBookingService {
     	confirmScreen confirmer = new confirmScreen(frame);
     	double price = calcPrice();
     	boolean canAfford = user.canAfford(price);
-    	boolean confirm = confirmer.confirm("Olet menossa " +  (String) mistaBox.getSelectedItem() + " " + (String) minneBox.getSelectedItem() + " " + (String) kellonaikaBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() + (String) paivamaaraBox2.getSelectedItem() + "ta", "Hinta: " + price + "e", canAfford);
+    	boolean confirm = confirmer.confirm("Reitti: " + (String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() + (String) paivamaaraBox2.getSelectedItem() + "ta", "Hinta: " + price + "e", canAfford);
     	return confirm;
     }
     private Double calcPrice(){
-    	String leave = (String) mistaBox.getSelectedItem();
-    	String dest= (String) minneBox.getSelectedItem();
-    	if(leave == dest){
-    		return 0.0;
+    	
+    	String junaReitti= (String) reittiBox.getSelectedItem();
+    	for(int k=0;k<trainList.size();k++){
+    		if(trainList.get(k).matchingReitti(junaReitti)){
+    			return trainList.get(k).getCost();
+    		}	
     	}
-    	if(leave == "Tampereelta" && dest == "Helsinkiin"){
-    		return 10.0;
-    	}
-    	return 5.0;
+    	return 0.0;
     }
    
     
@@ -390,20 +399,16 @@ public class TrainBookingService {
   	    if(e.getSource() == hyvaksyButton) {
   	    	if(confirm()){
   	    	user.removeMoney(calcPrice());
-  	    	leftPanel.remove(mistaBox);
-  	    	leftPanel.remove(minneBox);
-  	    	leftPanel.remove(kellonaikaBox);
+  	    	leftPanel.remove(reittiBox);
   	    	leftPanel.remove(paivamaaraBox1);
   	    	leftPanel.remove(paivamaaraBox2);
-  	    	user.setVaraus((String) mistaBox.getSelectedItem() + " ; " +(String) minneBox.getSelectedItem() + " ; " + (String) kellonaikaBox.getSelectedItem() + " ; " + (String) paivamaaraBox1.getSelectedItem() +  " ; " + (String) paivamaaraBox2.getSelectedItem() + " ; ");
+  	    	user.setVaraus((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() +  " " + (String) paivamaaraBox2.getSelectedItem() + " ; ");
   	    	removeTextAndButtonsAndReturn();
   	    	}
   	    	
 		}
   	  	if(e.getSource() == peruButton) {
-  	  		leftPanel.remove(mistaBox);
-  	  		leftPanel.remove(minneBox);
-  	  		leftPanel.remove(kellonaikaBox);
+  	  		leftPanel.remove(reittiBox);
   	  		leftPanel.remove(paivamaaraBox1);
 	    	leftPanel.remove(paivamaaraBox2);
 	    	removeTextAndButtonsAndReturn();
