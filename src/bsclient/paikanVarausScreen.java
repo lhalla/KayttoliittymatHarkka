@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -18,6 +19,9 @@ import bsshared.*;
 public class paikanVarausScreen {
 	JDialog dialog;
 	JPanel mainPanel = new JPanel();
+	
+	//label korvattava junien paikanvarauksella
+	private JLabel SeatText = new JLabel();
 	
 	private JButton confirmButton = new JButton("VAHVISTA");
 	private JButton cancelButton = new JButton("PERU");
@@ -43,6 +47,10 @@ public class paikanVarausScreen {
 		mainPanel.setLayout(grid);
 		mainPanel.setBackground(Color.WHITE);
 		dialog.add(mainPanel);
+		
+		SeatText.setText("Junan paikanvaraus tähän");
+		SeatText.setFont(new Font("Tahoma", Font.BOLD, 12));
+		mainPanel.add(SeatText);
 		
 		confirmButton.setBackground(new Color(50, 200, 45));
 		if(!train.areSeatsLeft())confirmButton.setBackground(Color.red);

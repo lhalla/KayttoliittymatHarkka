@@ -66,6 +66,14 @@ public class TrainBookingService {
     private JButton lompakkoButton = new JButton("LOMPAKKO");
     
     private JButton adminJunaAsetuksetButton = new JButton("Juna-ASETUKSET");
+    private JButton poistaJunaButton = new JButton("POISTA REITTI");
+    private JButton lisaaJunaButton = new JButton("LISAA REITTI");
+    private JButton hyvaksyJunanLuominenButton = new JButton("HYVÄKSY");
+    private JButton peruJunanLuominenButton = new JButton("PERU");
+    private JButton hyvaksyJunanPoistaminenButton = new JButton("HYVÄKSY");
+    private JButton peruJunanPoistaminenButton = new JButton("PERU");
+    
+    
     private JButton adminAsetuksetButton = new JButton("Admin-ASETUKSET");
     
     private JButton poistuButton = new JButton("POISTU");
@@ -82,8 +90,8 @@ public class TrainBookingService {
     private JButton addFunds25 = new JButton("Lis�� 25e");
     private JButton addFunds100 = new JButton("Lis�� 100e");
     
-    private JButton hyvaksyButton = new JButton("Hyvaksy");
-    private JButton peruButton = new JButton("Peru");
+    private JButton hyvaksyVarausButton = new JButton("Hyvaksy");
+    private JButton peruVarausButton = new JButton("Peru");
     
   	
     //JComboBoxit junanvaraukselle
@@ -193,7 +201,7 @@ public class TrainBookingService {
     //these initialize the buttons or remove them
     private void makeButtonLP(JButton button){
     	button.setBackground(new Color(50, 200, 45));
-    	if(button == buttonTakaisin || button==peruButton)button.setBackground(Color.RED);
+    	if(button == buttonTakaisin || button==peruVarausButton)button.setBackground(Color.RED);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
         button.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -290,8 +298,8 @@ public class TrainBookingService {
     	leftPanel.add(reittiBox);
     	leftPanel.add(paivamaaraBox1);
     	leftPanel.add(paivamaaraBox2);
-    	makeButtonLP(hyvaksyButton);
-    	makeButtonLP(peruButton);
+    	makeButtonLP(hyvaksyVarausButton);
+    	makeButtonLP(peruVarausButton);
     }
     
     
@@ -374,9 +382,32 @@ public class TrainBookingService {
 	    }
   	    if(e.getSource() == adminJunaAsetuksetButton) {
   	    	//Juna asetukset
+  	    	clearButtons();
+  	    	makeButtonLP(lisaaJunaButton);
+  	    	makeButtonLP(poistaJunaButton);
+  	    	makeButtonLP(buttonTakaisin);	
 	    }
+  	    if(e.getSource() == lisaaJunaButton) {
+  	    	
+  	  	}
+  	  	if(e.getSource() == poistaJunaButton) {
+  	  		clearButtons();
+	    	String[] reitti= new String[trainList.size()];
+	    	for(int a=0;a<trainList.size();a++){
+	    	reitti[a]=trainList.get(a).getRoute();
+	    	}
+	    	reittiBox= new JComboBox<>(reitti);
+	    	leftPanel.add(reittiBox);
+	    	
+	    	makeButtonLP(hyvaksyJunanPoistaminenButton);
+	    	makeButtonLP(peruJunanPoistaminenButton);
+  		}
+  	    
+  	    
   	    if(e.getSource() == adminAsetuksetButton) {
   	    	//admin asetukset
+  	    	clearButtons();
+  	    	makeButtonLP(buttonTakaisin); 	    	
 	    }
   	    if(e.getSource() == poistuButton) {
   	    	//logout
@@ -424,7 +455,7 @@ public class TrainBookingService {
 		
 		}
   	    
-  	    if(e.getSource() == hyvaksyButton) {
+  	    if(e.getSource() == hyvaksyVarausButton) {
   	    	chosenTrain=getChosenTrain();
   	    	TrainSeat chosenSeat = varaaPaikka();
   	    	if(chosenSeat.paikkaOnOikeastiVarattu()){
@@ -439,12 +470,28 @@ public class TrainBookingService {
   	    	}
   	    	
 		}
-  	  	if(e.getSource() == peruButton) {
+  	  	if(e.getSource() == peruVarausButton) {
   	  		leftPanel.remove(reittiBox);
   	  		leftPanel.remove(paivamaaraBox1);
 	    	leftPanel.remove(paivamaaraBox2);
 	    	removeTextAndButtonsAndReturn();
   		}
+  	 	if(e.getSource() == hyvaksyJunanLuominenButton){
+  		
+		}
+  	  	if(e.getSource() == peruJunanLuominenButton){
+			
+		}
+  	  	if(e.getSource() == hyvaksyJunanPoistaminenButton){
+  	  		chosenTrain=getChosenTrain();
+  	  		trainList.remove(chosenTrain);
+  	  		leftPanel.remove(reittiBox);
+  	  		removeTextAndButtonsAndReturn();
+		}
+	  	if(e.getSource() == peruJunanPoistaminenButton){
+	  		leftPanel.remove(reittiBox);
+	  		removeTextAndButtonsAndReturn();
+		}
   	    
   	    
   	    if(e.getSource() == buttonTakaisin) {

@@ -33,6 +33,9 @@ public class Train implements Serializable
 	public boolean getAvailability(){
 		return Available;
 	}
+	public String getName(){
+		return name;
+	}
 
 	public boolean areSeatsLeft(){
 		for (int row = 0; row < seats.length; row++)
