@@ -1,6 +1,8 @@
 package bsclient;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -18,7 +20,8 @@ import bsshared.*;
 
 public class paikanVarausScreen {
 	JDialog dialog;
-	JPanel mainPanel = new JPanel();
+	JPanel acceptButtonsPanel = new JPanel();
+	JPanel chooseSeatPanel = new JPanel();
 	
 	//label korvattava junien paikanvarauksella
 	private JLabel SeatText = new JLabel();
@@ -39,18 +42,28 @@ public class paikanVarausScreen {
 	}
 	
 	public TrainSeat varaa(){
+		dialog.getContentPane().setLayout(new BorderLayout());
 		dialog.setModal (true);
 		dialog.setAlwaysOnTop (true);
 		dialog.setModalityType (ModalityType.APPLICATION_MODAL);
 		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		GridLayout grid= new GridLayout(0,1);
-		mainPanel.setLayout(grid);
-		mainPanel.setBackground(Color.WHITE);
-		dialog.add(mainPanel);
+		dialog.setResizable(false);
+		
+		GridLayout gridBot= new GridLayout(0,1);
+		acceptButtonsPanel.setLayout(gridBot);
+		acceptButtonsPanel.setBackground(Color.WHITE);
+		acceptButtonsPanel.setPreferredSize(new Dimension(900,200));
+		dialog.add(acceptButtonsPanel, BorderLayout.SOUTH);
+		
+		GridLayout gridTop= new GridLayout(0,1);
+		chooseSeatPanel.setLayout(gridTop);
+		chooseSeatPanel.setBackground(Color.WHITE);
+		chooseSeatPanel.setPreferredSize(new Dimension(900,400));
+		dialog.add(chooseSeatPanel, BorderLayout.CENTER);
 		
 		SeatText.setText("Junan paikanvaraus tähän");
 		SeatText.setFont(new Font("Tahoma", Font.BOLD, 12));
-		mainPanel.add(SeatText);
+		chooseSeatPanel.add(SeatText);
 		
 		confirmButton.setBackground(new Color(50, 200, 45));
 		if(!train.areSeatsLeft())confirmButton.setBackground(Color.red);
@@ -63,8 +76,8 @@ public class paikanVarausScreen {
         cancelButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 		if(train.areSeatsLeft())confirmButton.addActionListener(buttonlistener);
 		cancelButton.addActionListener(buttonlistener);
-		mainPanel.add(confirmButton);
-		mainPanel.add(cancelButton);
+		acceptButtonsPanel.add(confirmButton);
+		acceptButtonsPanel.add(cancelButton);
 		
 		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);

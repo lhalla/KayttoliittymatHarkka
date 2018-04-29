@@ -13,7 +13,7 @@ public class Train implements Serializable
 	public Train() {
 		this.Available=true;
 		this.cost=5.0;
-		this.route="A001 Helsinki-Turku klo 8-10";
+		this.route="A001: Helsinki-Turku klo 8-10";
 		this.seats= new String[10][2];
 	}
 	public Train(String route, double cost){
