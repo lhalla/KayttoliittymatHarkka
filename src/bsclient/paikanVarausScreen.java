@@ -61,7 +61,7 @@ public class paikanVarausScreen {
 		chooseSeatPanel.setPreferredSize(new Dimension(900,400));
 		dialog.add(chooseSeatPanel, BorderLayout.CENTER);
 		
-		SeatText.setText("Junan paikanvaraus tähän");
+		SeatText.setText("Junan paikanvaraus tähän, Eli paikanVarausScreenin pitää visualisoida paikan varaus, varata paikka junasta ja palautetussa trainseat oliossa olla varattu paikka");
 		SeatText.setFont(new Font("Tahoma", Font.BOLD, 12));
 		chooseSeatPanel.add(SeatText);
 		
