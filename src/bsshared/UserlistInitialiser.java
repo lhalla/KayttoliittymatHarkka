@@ -12,13 +12,15 @@ public class UserlistInitialiser
 	{
 		users = new ArrayList<User>();
 		
-		createAdmin();
+		createUsers();
 		saveList();
 	}
 	
-	public void createAdmin()
+	public void createUsers()
 	{
-		users.add(new User("admin", "admin"));
+		users.add(new Admin());
+		users.add(new User("bob","halibut"));
+		
 	}
 	
 	public void saveList()

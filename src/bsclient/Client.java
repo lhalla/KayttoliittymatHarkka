@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client
 {
@@ -20,6 +21,8 @@ public class Client
 	
 	private final String server = "localhost";	// server name
 	private final int port = 8800;	// server port
+	
+	protected ArrayList<Train> trainList;
 	
 	/**
 	 * Constructor.
@@ -82,7 +85,6 @@ public class Client
 			boolean res = streamIn.readBoolean();
 			if (res)
 				user = (User)streamIn.readObject();
-			cgui.user = user;
 			return res;
 		}
 		catch (IOException ioe)
@@ -93,6 +95,24 @@ public class Client
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	protected void fetchTrains()
+	{
+		try
+		{
+			streamOut.writeObject("getTrains");
+			streamOut.flush();
+			trainList = (ArrayList<Train>)streamIn.readObject();
+		}
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
+		catch (ClassNotFoundException cnfe)
+		{
+			cnfe.printStackTrace();
+		}
 	}
 	
 	/**
@@ -123,7 +143,6 @@ public class Client
 	
 	public void updateUser()
 	{
-		UserUpdate uuMessage = new UserUpdate(user);
 		
 		if (socket != null && !socket.isClosed())
 		{
@@ -131,7 +150,8 @@ public class Client
 			{
 				while (true)
 				{
-					streamOut.writeObject(uuMessage);
+					System.out.println("nimi: " + user.getUsername() + ", mani: " + user.getLompakko());
+					streamOut.writeObject(user);
 					streamOut.flush();
 					if (streamIn.readBoolean()) break;
 				}

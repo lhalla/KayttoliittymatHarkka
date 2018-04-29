@@ -56,7 +56,7 @@ public class ClientGUI extends JFrame
             public void run()
             {            	
                 JFrame frame = new ClientGUI();
-                TrainBookingService service= new TrainBookingService(frame,((ClientGUI)frame).user);
+                TrainBookingService service= new TrainBookingService(frame);
                 
                 frame = service.makeWindow();
                 frame.setTitle("Train Booking Service");

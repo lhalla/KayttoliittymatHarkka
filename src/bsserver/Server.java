@@ -16,7 +16,9 @@ public class Server
 	private SimpleDateFormat sdf;
 	private final int port = 8800;	// the port this server runs on
 	protected boolean serverOn;	// is this server running?
+	
 	protected ArrayList<User> users;	// list of users
+	protected ArrayList<Train> trains;	// list of trains
 	
 	/**
 	 * Constructor.
@@ -30,17 +32,40 @@ public class Server
 		ctl = new ArrayList<ClientThread>();
 		
 		// Load a list of all users from file.
-		try (ObjectInputStream streamFile = new ObjectInputStream(new FileInputStream("src/data/users.dat")))
+		while (true)
 		{
-			users = (ArrayList<User>) streamFile.readObject();
+			try (ObjectInputStream streamFile = new ObjectInputStream(new FileInputStream("src/data/users.dat")))
+			{
+				users = (ArrayList<User>) streamFile.readObject();
+				break;
+			}
+			catch (FileNotFoundException fnfe)
+			{
+				new UserlistInitialiser();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
-		catch (ClassNotFoundException cnfe)
+		
+		// Load a list of all trains from file.
+		while (true)
 		{
-			cnfe.printStackTrace();
-		}
-		catch (IOException ioe)
-		{
-			ioe.printStackTrace();
+			try (ObjectInputStream streamFile = new ObjectInputStream(new FileInputStream("src/data/trains.dat")))
+			{
+				trains = (ArrayList<Train>) streamFile.readObject();
+				break;
+			}
+			catch (FileNotFoundException e)
+			{
+				initialiseTrains();
+				break;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -100,6 +125,9 @@ public class Server
 	{
 		serverOn = false;
 		
+		saveUsers();
+		saveTrains();
+		
 		// Connect to itself as a client -> serverOn is detected to be false.
 		try (Socket sock = new Socket("localhost", port)) {}
 		catch (Exception e) {}
@@ -155,29 +183,41 @@ public class Server
 		return false;
 	}
 	
-	synchronized protected boolean updateUser(User user, UserUpdate uuMessage)
+	/**
+	 * Updates a user's profile.
+	 * @param user User to be updated.
+	 * @param uuMessage
+	 * @return
+	 */
+	synchronized protected boolean updateUser(User user, User update)
 	{
+		// Check if the list of users contains the given user.
 		boolean res = users.contains(user);
 		
+		// If it doesn't, return false.
 		if (!res) return res;
 		
+		// Otherwise find the user and update it.
 		for (User u : users)
 		{
 			if (u.equals(user))
-				users.remove(u);
+			{
+				u.copy(update);
+				break;
+			}
 		}
 		
-		User updUser = new User();
-		updUser.copy(uuMessage.getUser());
-		
-		res = users.add(updUser);
-		
-		if (!res) return res;
-		
-		while (true)
-		{
-			if (saveUsers()) break;
-		}
+//		User updUser = new User();
+//		updUser.copy(uuMessage.getUser());
+//		
+//		res = users.add(updUser);
+//		
+//		if (!res) return res;
+//		
+//		while (true)
+//		{
+//			if (saveList(users,"users")) break;
+//		}
 		
 		return true;
 	}
@@ -215,7 +255,7 @@ public class Server
 	}
 	
 	synchronized protected boolean saveUsers()
-	{
+	{	
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/users.dat")))
 		{
 			oos.writeObject(users);
@@ -225,6 +265,35 @@ public class Server
 		{
 			return false;
 		}
+	}
+	
+	synchronized protected boolean saveTrains()
+	{	
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/trains.dat")))
+		{
+			oos.writeObject(trains);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+	
+	synchronized void initialiseTrains()
+	{
+		trains = new ArrayList<>();
+		
+		trains.add(new Train());
+    	trains.add(new Train());
+    	trains.add(new Train());
+    	trains.get(0).setRoute("Helsinki", "Tampere", "7-12");
+    	trains.get(0).setCost(11.5);
+    	trains.get(1).setRoute("Turku", "Tampere", "10-12");
+    	trains.get(0).setCost(8.5);
+    	trains.get(2).setRoute("Helsinki", "Turku", "19-23");
+    	
+    	saveTrains();
 	}
 	
 	/**

@@ -70,7 +70,9 @@ public class User implements Serializable
 		this.password = other.password;
 		this.address = other.address;
 		this.ccNumber = other.ccNumber;
+		this.lompakko = other.lompakko;
 		
+		this.varaukset.clear();
 		for (String varaus : other.varaukset)
 			this.varaukset.add(varaus);
 	}

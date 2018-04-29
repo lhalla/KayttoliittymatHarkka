@@ -29,7 +29,7 @@ import java.awt.event.ItemListener;
 
 public class TrainBookingService {
 	
-	private User user=new User("","");
+	private User user;
 	
 	//List of trains and their properties
 	private ArrayList<Train> trainList = new ArrayList<Train>();
@@ -38,7 +38,7 @@ public class TrainBookingService {
 	//cheks if user is admin
 	private boolean isAdmin;
 	
-	
+	private Client client;
 
     private JFrame frame;
 
@@ -78,9 +78,9 @@ public class TrainBookingService {
     private JButton buttonMuutaCCNumber = new JButton("MUUTA CCNum");
     private JButton buttonMuutaSalasana = new JButton("MUUTA Salasana");
     
-    private JButton addFunds5 = new JButton("Lisää 5e");
-    private JButton addFunds25 = new JButton("Lisää 25e");
-    private JButton addFunds100 = new JButton("Lisää 100e");
+    private JButton addFunds5 = new JButton("Lisï¿½ï¿½ 5e");
+    private JButton addFunds25 = new JButton("Lisï¿½ï¿½ 25e");
+    private JButton addFunds100 = new JButton("Lisï¿½ï¿½ 100e");
     
     private JButton hyvaksyButton = new JButton("Hyvaksy");
     private JButton peruButton = new JButton("Peru");
@@ -93,18 +93,29 @@ public class TrainBookingService {
     
     private JButton buttonTakaisin = new JButton("TAKAISIN");
     
-    //TODO: Pyytää parametriksi trainListin, korvaa makeCustomTrains metodi
-    public TrainBookingService(JFrame frame, User user) {
+    //TODO: Pyytï¿½ï¿½ parametriksi trainListin, korvaa makeCustomTrains metodi
+    public TrainBookingService(JFrame frame)
+    {
     	this.frame=frame;
-    	this.user.copy(user);
-    	if(user.getUsername().equals("admin")){
+ //   	this.user.copy(user);
+    	
+    	client = ((ClientGUI)frame).client;
+    	
+    	this.user = client.user;
+    	
+    	if(user.getUsername().equals("admin"))
+    	{
     		isAdmin=true;
     	}
-    	else{
+    	else
+    	{
     		isAdmin=false;
     	}
-    	makeCustomTrains();
-    	}
+    	
+    	client.fetchTrains();
+    	trainList = ((ClientGUI)frame).client.trainList;
+//    	makeCustomTrains();
+   	}
 
     public JFrame makeWindow() {
 
@@ -266,13 +277,13 @@ public class TrainBookingService {
     	
     }
     private void varausMetodi(){
-    	//Comboboxit reittibox saavat arvonsa tästä
+    	//Comboboxit reittibox saavat arvonsa tï¿½stï¿½
     	String[] reitti= new String[trainList.size()];
     	for(int a=0;a<trainList.size();a++){
     	reitti[a]=trainList.get(a).getRoute();
     	}
     	String[] paivamaara= new String[]{"1.","2.","3.","4.","5.","6.","7.","8.","9.","10.","11.","12.","13.","14.","15.","16.","17.","18.","19.","20.","21.","22.","23.","24.","25.","26.","27.","28.","29.","30.","31"};
-    	String[] kuukausi= new String[]{"tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kesäkuu","heinäkuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu"};
+    	String[] kuukausi= new String[]{"tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kesï¿½kuu","heinï¿½kuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu"};
     	reittiBox= new JComboBox<>(reitti);
     	paivamaaraBox1= new JComboBox<>(paivamaara);
     	paivamaaraBox2= new JComboBox<>(kuukausi);
@@ -385,7 +396,7 @@ public class TrainBookingService {
   			
   		}
   		if(e.getSource() == peruVarauksetButton) {
-  			//lisää tähän rahantakaisinsaanti
+  			//lisï¿½ï¿½ tï¿½hï¿½n rahantakaisinsaanti
   			for(int j=0;j<user.getVaraukset().size();j++){
   				user.addMoney(5.0);
   			}

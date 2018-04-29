@@ -1,20 +1,22 @@
 package bsshared;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Train {
+public class Train implements Serializable
+{
+	private static final long serialVersionUID = 1L;
 	public boolean Available;
 	public double cost;
 	public String name;
 	public String route;
-	public ArrayList<String> seats;
+	public String[][] seats;
 
 	public Train() {
 		this.Available=true;
 		this.cost=5.0;
 		this.name="A001";
 		this.route="Helsinki-Turku klo 8-10";
-		this.seats=new ArrayList<String>();
+		this.seats= new String[10][2];
 	}
 	
 	public boolean matchingReitti (String reitti){
@@ -31,9 +33,16 @@ public class Train {
 	public boolean getAvailability(){
 		return Available;
 	}
-	//TODO: korjaa antamaan false jos paika täynnä
+
 	public boolean areSeatsLeft(){
-		return true;
+		for (int row = 0; row < seats.length; row++)
+		{
+			for (int seat = 0; seat < seats[row].length; seat++)
+			{
+				if (seats[row][seat] == null || seats[row][seat].equals("")) return true;
+			}
+		}
+		return false;
 	}
 	
 	

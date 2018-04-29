@@ -145,12 +145,23 @@ public class ClientThread extends Thread
 					master.remove(id);
 					close();
 				}
-				else if (objIn instanceof UserUpdate)
+				else if (objIn instanceof User)
 				{
-					boolean res = master.updateUser(this.user, (UserUpdate)objIn);
+					boolean res = master.updateUser(this.user, (User)objIn);
+					master.displayEvent("nimi: " + ((User)objIn).getUsername() + ", mani: " + ((User)objIn).getLompakko());
 					master.displayEvent("CT" + id + ": User update " + (res ? "successful." : "failed."));
 					streamOut.writeBoolean(res);
 					streamOut.flush();
+				}
+				else if (objIn instanceof String)
+				{
+					String cmd = (String)objIn;
+					
+					if (cmd.equals("getTrains"))
+					{
+						streamOut.writeObject(master.trains);
+						streamOut.flush();
+					}
 				}
 			}
 		}
