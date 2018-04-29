@@ -7,6 +7,11 @@ public class TrainSeat {
 	public boolean paikkaOnOikeastiVarattu;
 	String paikka;
 	
+	//used in hyväksyvaraus button
+	//the idea is to do this:
+	//user.setVaraus(reittibox + paivamääräboxes + chosenseat)
+	
+	
 	public TrainSeat() {
 		paikka="";
 	}

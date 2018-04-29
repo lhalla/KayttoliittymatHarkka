@@ -33,6 +33,11 @@ public class confirmScreen {
 		dialog = new JDialog (frame, "Vahvista varaus");
 		dialog.setSize(500, 500);
 	}
+	/**
+	 * Return true if user clicks confirm otherwise false
+	 * user cant click confirm if he/she doesnt have enough money for the trip
+	 * no fixes needed.
+	 */
 	public boolean confirm(String ScreenRouteText,String ScreenPriceText, boolean canAfford){
 		dialog.setModal (true);
 		dialog.setAlwaysOnTop (true);

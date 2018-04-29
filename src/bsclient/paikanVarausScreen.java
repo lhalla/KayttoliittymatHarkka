@@ -23,7 +23,7 @@ public class paikanVarausScreen {
 	JPanel acceptButtonsPanel = new JPanel();
 	JPanel chooseSeatPanel = new JPanel();
 	
-	//label korvattava junien paikanvarauksella
+	//label korvattava junien paikanvarauksella!!!!
 	private JLabel SeatText = new JLabel();
 	
 	private JButton confirmButton = new JButton("VAHVISTA");
@@ -40,7 +40,7 @@ public class paikanVarausScreen {
 		this.train=train;
 		trainseat=new TrainSeat();
 	}
-	
+	//hyväksyvarausbutton johtaa tähän metodiin, ja siellä loppujen lopuksi päivitetään 
 	public TrainSeat varaa(){
 		dialog.getContentPane().setLayout(new BorderLayout());
 		dialog.setModal (true);
