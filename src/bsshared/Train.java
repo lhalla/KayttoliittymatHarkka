@@ -7,15 +7,19 @@ public class Train implements Serializable
 	private static final long serialVersionUID = 1L;
 	public boolean Available;
 	public double cost;
-	public String name;
 	public String route;
 	public String[][] seats;
 
 	public Train() {
 		this.Available=true;
 		this.cost=5.0;
-		this.name="A001";
-		this.route="Helsinki-Turku klo 8-10";
+		this.route="A001 Helsinki-Turku klo 8-10";
+		this.seats= new String[10][2];
+	}
+	public Train(String route, double cost){
+		this.Available=true;
+		this.cost=5.0;
+		this.route=route;
 		this.seats= new String[10][2];
 	}
 	
@@ -33,9 +37,7 @@ public class Train implements Serializable
 	public boolean getAvailability(){
 		return Available;
 	}
-	public String getName(){
-		return name;
-	}
+	
 
 	public boolean areSeatsLeft(){
 		for (int row = 0; row < seats.length; row++)
