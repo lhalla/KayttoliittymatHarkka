@@ -75,6 +75,7 @@ public class paikanVarausScreen {
 		//makes 20 seats to choose from
 		for(int seats=0;seats<20;seats++){
 			boxList.add(new JCheckBox());
+			if(seats==9 || seats==19)boxList.get(seats).setBackground(Color.blue);
 			if(train.seats[(seats%10)][seats/10] != null){
 				if(!train.seats[(seats%10)][seats/10].equals("")){
 					boxList.get(seats).setBackground(Color.red);

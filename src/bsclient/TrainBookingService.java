@@ -531,10 +531,20 @@ public class TrainBookingService {
 	    	centerPanel.remove(image);
 	    	
 	    	TextList.add(new JLabel());
-	    	TextList.get(0).setText("Train Booking Service versio 1.0 tukee monia toimintoja, mutta poistu näppäin on vielä epäkunnossa, poistu painamalla oikean yläkulman rastia");
+	    	TextList.add(new JLabel());
+	    	TextList.add(new JLabel());
+	    	TextList.get(0).setText("Train Booking Service versio 1.0");
 	    	TextList.get(0).setFont(new Font("Tahoma", Font.BOLD,12));
     		TextList.get(0).setForeground(Color.BLACK);
+    		TextList.get(1).setText("poistu näppäin on vielä epäkunnossa, poistu painamalla oikean yläkulman rastia");
+	    	TextList.get(1).setFont(new Font("Tahoma", Font.BOLD,12));
+    		TextList.get(1).setForeground(Color.BLACK);
+    		TextList.get(2).setText("Varauksissa siniset paikat ovat erikoispaikkoja esimerkiksi lemmikeille tai liikuntakyvyttömille");
+	    	TextList.get(2).setFont(new Font("Tahoma", Font.BOLD,12));
+    		TextList.get(2).setForeground(Color.BLACK);
     		centerPanel.add(TextList.get(0));
+    		centerPanel.add(TextList.get(1));
+    		centerPanel.add(TextList.get(2));
     		centerPanel.setBackground(new Color(127,235,255));
 	    	
 	    	makeButtonLP(buttonTakaisin);
@@ -570,13 +580,16 @@ public class TrainBookingService {
   			TextList.get(0).setText("           Wallet: " + user.getLompakko() + "e");
   		}
   		if(e.getSource() == buttonMuutaOsoite){
-  			
+  			changeStringScreen changer=new changeStringScreen(frame,"Change address");
+  			user.setAddress(changer.changeText("Set your new address here"));
   		}
   		if(e.getSource() == buttonMuutaCCNumber){
-  			
+  			changeStringScreen changer=new changeStringScreen(frame,"Change CCNum");
+  			user.setAddress(changer.changeText("Set your new CCNum here"));
   		}
 		if(e.getSource() == buttonMuutaSalasana){
-		
+			changeStringScreen changer=new changeStringScreen(frame,"Change Password");
+  			user.setAddress(changer.changeText("Set your new Password here"));
 		}
   	    
   	    if(e.getSource() == hyvaksyVarausButton) {
@@ -585,7 +598,7 @@ public class TrainBookingService {
   	    	if(chosenSeat.paikkaOnOikeastiVarattu()){
   	    		if(confirm()){
   	    			user.removeMoney(calcPrice());
-  	    			user.setVaraus((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() +  " " + (String) paivamaaraBox2.getSelectedItem() + "ta" + "Paikka: " + chosenSeat.getPaikka());
+  	    			user.setVaraus((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() +  " " + (String) paivamaaraBox2.getSelectedItem() + "ta" + " Paikka: " + chosenSeat.getPaikka());
   	    			chosenTrain.seats[chosenSeat.getColumn()][chosenSeat.getRow()]=user.getUsername();
   	    			removeTextAndButtonsAndReturn();
   	    		}
