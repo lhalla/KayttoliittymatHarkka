@@ -407,7 +407,7 @@ public class TrainBookingService {
 	 * this method needs no fixes but paikanvarauscreen class requires a couple of tweaks, and hyväksyvarausbutton will update the user.varaukset value if confirmer returns true
 	 */
     private TrainSeat varaaPaikka(){
-    	paikanVarausScreen paikanVaraaja = new paikanVarausScreen(frame,chosenTrain);
+    	paikanVarausScreen paikanVaraaja = new paikanVarausScreen(frame,chosenTrain,user.getUsername());
     	TrainSeat varattuPaikka= paikanVaraaja.varaa();	
     	return varattuPaikka;
     }
@@ -586,6 +586,7 @@ public class TrainBookingService {
   	    		if(confirm()){
   	    			user.removeMoney(calcPrice());
   	    			user.setVaraus((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() +  " " + (String) paivamaaraBox2.getSelectedItem() + "ta" + "Paikka: " + chosenSeat.getPaikka());
+  	    			chosenTrain.seats[chosenSeat.getColumn()][chosenSeat.getRow()]=user.getUsername();
   	    			removeTextAndButtonsAndReturn();
   	    		}
   	    	}

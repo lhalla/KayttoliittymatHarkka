@@ -6,6 +6,8 @@ package bsshared;
 public class TrainSeat {
 	public boolean paikkaOnOikeastiVarattu;
 	String paikka;
+	int row;
+	int column;
 	
 	//used in hyväksyvaraus button
 	//the idea is to do this:
@@ -26,8 +28,20 @@ public class TrainSeat {
 	public String getPaikka(){
 		return paikka;
 	}
+	public int getRow(){
+		return row;
+	}
+	public int getColumn(){
+		return column;
+	}
 
 	public void setPaikka(String paikka){
 		this.paikka=paikka;
+	}
+	public void setRow(int row){
+		this.row=row;
+	}
+	public void setColumn(int column){
+		this.column=column;
 	}
 }

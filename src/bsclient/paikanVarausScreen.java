@@ -34,16 +34,18 @@ public class paikanVarausScreen {
 	
 	ButtonListener buttonlistener = new ButtonListener();
 	
-	String rivi="invalid";
-	String column="invalid";
+	int rivi=-1;
+	int column=-1;
 	
 	Train train;
 	TrainSeat trainseat;
+	String username;
 
-	public paikanVarausScreen(Frame frame, Train train) {
+	public paikanVarausScreen(Frame frame, Train train, String userName) {
 		dialog = new JDialog (frame, "Varaa paikka");
-		dialog.setSize(900, 600);
+		dialog.setSize(800, 450);
 		this.train=train;
+		this.username=userName;
 		trainseat=new TrainSeat();
 	}
 	//hyväksyvarausbutton johtaa tähän metodiin, ja siellä loppujen lopuksi päivitetään 
@@ -58,19 +60,29 @@ public class paikanVarausScreen {
 		GridLayout gridBot= new GridLayout(0,1);
 		acceptButtonsPanel.setLayout(gridBot);
 		acceptButtonsPanel.setBackground(Color.WHITE);
-		acceptButtonsPanel.setPreferredSize(new Dimension(900,200));
+		acceptButtonsPanel.setPreferredSize(new Dimension(800,150));
 		dialog.add(acceptButtonsPanel, BorderLayout.SOUTH);
 		
 		GridLayout gridTop= new GridLayout(2,10);
 		chooseSeatPanel.setLayout(gridTop);
 		chooseSeatPanel.setBackground(Color.WHITE);
-		chooseSeatPanel.setPreferredSize(new Dimension(900,400));
+		chooseSeatPanel.setPreferredSize(new Dimension(800,300));
 		dialog.add(chooseSeatPanel, BorderLayout.CENTER);
 		
+		//poista!!
+		train.seats[0][0]="remes";
 		
 		//makes 20 seats to choose from
 		for(int seats=0;seats<20;seats++){
 			boxList.add(new JCheckBox());
+			if(train.seats[(seats%10)][seats/10] != null){
+				if(!train.seats[(seats%10)][seats/10].equals("")){
+					boxList.get(seats).setBackground(Color.red);
+					boxList.get(seats).setForeground(Color.white);
+					boxList.get(seats).setText(train.seats[(seats%10)][seats/10]);
+					boxList.get(seats).setEnabled(false);
+				}
+			}
 			chooseSeatPanel.add(boxList.get(seats));
 			
 		}
@@ -105,18 +117,18 @@ public class paikanVarausScreen {
   	    public void actionPerformed(ActionEvent e) {
   	    if(e.getSource() == confirmButton) {
   	    	//TODO: aseta paikan muut ominaisuudet
-  			for(int seat=1;seat<21;seat++){
-  					if(boxList.get(seat - 1).isSelected()){
-  						rivi = "" + (seat/11 + 1);
-  						if(seat < 11)
-  						column = "" + seat;
-  						else 
-  						column = "" + (seat-10);
+  			for(int seat=0;seat<20;seat++){
+  					if(boxList.get(seat).isSelected()){
+  						rivi = (seat/10);
+  						column = seat%10;
+  						
   					}
   				
   	    	}
-  			if(rivi!="invalid"){
-  	    	trainseat.setPaikka("Rivi: " + rivi + "Paikka: " + column);
+  			if(rivi!=-1){
+  	    	trainseat.setPaikka("Rivi: " + (rivi+1) + "Paikka: " + (column+1));
+  	    	trainseat.setRow(rivi);
+  	    	trainseat.setColumn(column);
   	    	trainseat.setPaikanVaraus(true);
   	    	dialog.setVisible(false);
   			}
