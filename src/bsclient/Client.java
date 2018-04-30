@@ -72,7 +72,7 @@ public class Client
 	 * @param password password given through the login prompt.
 	 * @return true if login was successful.
 	 */
-	public boolean authenticate(String username, String password)
+	protected boolean authenticate(String username, String password)
 	{
 		// Create a User object using the given credentials.
 		this.user = new User(username, password);
@@ -85,6 +85,8 @@ public class Client
 			boolean res = streamIn.readBoolean();
 			if (res)
 				user = (User)streamIn.readObject();
+			else
+				user = null;
 			return res;
 		}
 		catch (IOException ioe)
@@ -97,6 +99,9 @@ public class Client
 		return false;
 	}
 	
+	/**
+	 * Retrieves the up-to-date list of trains.
+	 */
 	protected void fetchTrains()
 	{
 		try
@@ -121,7 +126,7 @@ public class Client
 	 * @param password password given through the login prompt.
 	 * @return true if the account creation was successful.
 	 */
-	public boolean createNewUser(String username, String password)
+	protected boolean createNewUser(String username, String password)
 	{
 		// Create a NewUser object using the given credentials.
 		NewUser nuser = new NewUser(username, password);
@@ -132,16 +137,25 @@ public class Client
 			streamOut.writeObject(nuser);
 			streamOut.flush();
 			boolean res = streamIn.readBoolean();
+			if (res)
+				user = (User)streamIn.readObject();
+			else
+				user = null;
 			return res;
 		}
 		catch (IOException ioe)
 		{
 			System.err.println("Exception when trying to send NewUser object.");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	public void updateUser()
+	/**
+	 * Updates the user profile on the server.
+	 */
+	private void updateUser()
 	{
 		
 		if (socket != null && !socket.isClosed())
@@ -150,7 +164,6 @@ public class Client
 			{
 				while (true)
 				{
-					System.out.println("nimi: " + user.getUsername() + ", mani: " + user.getLompakko());
 					streamOut.writeObject(user);
 					streamOut.flush();
 					if (streamIn.readBoolean()) break;
@@ -160,12 +173,14 @@ public class Client
 		}
 	}
 	
-	public void logout()
+	/**
+	 * Logs out the user.
+	 */
+	protected void logout()
 	{
 		boolean logOutFromLoginScreen = true;
 		if(user != null){
 			logOutFromLoginScreen=false;
-			System.out.println("logging out," + user.getUsername() + " varaukset:" + user.getVaraukset());
 		}
 		
 		if (socket != null && !socket.isClosed())

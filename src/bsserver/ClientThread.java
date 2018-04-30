@@ -5,8 +5,6 @@ import messages.*;
 
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 // A thread for each client.
 public class ClientThread extends Thread
@@ -19,7 +17,6 @@ public class ClientThread extends Thread
 	protected final int id;	// connection id
 	
 	private User user;	// user logged in
-	private String date;	// date to determine which train routes to show
 	
 	/**
 	 * Constructor.
@@ -33,18 +30,13 @@ public class ClientThread extends Thread
 		this.master = master;
 		this.id = id;
 		this.socket = socket;
-		
-		date = new Date().toString() + "\n";
 	}
 	
 	/**
-	 * Runs the server (NOT YET IMPLEMENTED).
+	 * Runs the server.
 	 */
 	public void run()
 	{
-		// Keep running (FOR A WHILE LOOP TO BE IMPLEMENTED).
-		boolean keepRunning = true;
-		
 		// Establish a connection with the client
 		try
 		{
@@ -52,7 +44,7 @@ public class ClientThread extends Thread
 			streamOut = new ObjectOutputStream(socket.getOutputStream());
 			streamIn = new ObjectInputStream(socket.getInputStream());
 			
-			// LOOP0: Loop until the client has been verified or the log out (LATTER NOT IMPLEMENTED YET)
+			// LOOP0: Loop until the client has been verified or the log out.
 			while (true)
 			{
 				// Read an object from the incoming stream.
@@ -139,20 +131,22 @@ public class ClientThread extends Thread
 			while(true){
 				// Read an object from the incoming stream.
 				Object objIn = streamIn.readObject();
+				
+				// If the user is logging out, remove this thread.
 				if (objIn instanceof Logout)
 				{
 					master.displayEvent("CT" + id + ": Connection closed: LOGOUT.");
-					master.remove(id);
-					close();
+					break;
 				}
+				// If the user profile is to be updated, forward the action to the server.
 				else if (objIn instanceof User)
 				{
 					boolean res = master.updateUser(this.user, (User)objIn);
-					master.displayEvent("nimi: " + ((User)objIn).getUsername() + ", mani: " + ((User)objIn).getLompakko());
 					master.displayEvent("CT" + id + ": User update " + (res ? "successful." : "failed."));
 					streamOut.writeBoolean(res);
 					streamOut.flush();
 				}
+				// String commands.
 				else if (objIn instanceof String)
 				{
 					String cmd = (String)objIn;
@@ -179,7 +173,7 @@ public class ClientThread extends Thread
 	/**
 	 * Closes the streams and the socket.
 	 */
-	public void close()
+	protected void close()
 	{
 		try
 		{
@@ -203,7 +197,7 @@ public class ClientThread extends Thread
 		catch (Exception e) {}
 	}
 	
-	public static String getClientAddress(Socket socket)
+	private static String getClientAddress(Socket socket)
 	{
 		return socket.getInetAddress().toString() + ":" + socket.getPort();
 	}

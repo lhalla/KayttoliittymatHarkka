@@ -1,7 +1,6 @@
 package bsshared;
 
 
-//en osaa nimet� muuttujia premminkaan, koska trainseattiin tarvitsee 2 boolean arvoa
 //yksi confirmerille ja yksi train oliolle paikan saatavutta itse varaajaa varten
 public class TrainSeat {
 	public boolean paikkaOnOikeastiVarattu;

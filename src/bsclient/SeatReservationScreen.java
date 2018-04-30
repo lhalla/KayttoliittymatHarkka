@@ -20,12 +20,11 @@ import javax.swing.WindowConstants;
 
 import bsshared.*;
 
-public class paikanVarausScreen {
+public class SeatReservationScreen {
 	JDialog dialog;
 	JPanel acceptButtonsPanel = new JPanel();
 	JPanel chooseSeatPanel = new JPanel();
 	
-	//label korvattava junien paikanvarauksella!!!!
 	private JLabel seatChooser = new JLabel();
 	private ArrayList<JCheckBox> boxList = new ArrayList<JCheckBox>();
 	
@@ -41,7 +40,7 @@ public class paikanVarausScreen {
 	TrainSeat trainseat;
 	String username;
 
-	public paikanVarausScreen(Frame frame, Train train, String userName) {
+	public SeatReservationScreen(Frame frame, Train train, String userName) {
 		dialog = new JDialog (frame, "Varaa paikka");
 		dialog.setSize(800, 450);
 		this.train=train;
@@ -68,9 +67,6 @@ public class paikanVarausScreen {
 		chooseSeatPanel.setBackground(Color.WHITE);
 		chooseSeatPanel.setPreferredSize(new Dimension(800,300));
 		dialog.add(chooseSeatPanel, BorderLayout.CENTER);
-		
-		//poista!!
-		train.seats[0][0]="remes";
 		
 		//makes 20 seats to choose from
 		for(int seats=0;seats<20;seats++){
@@ -111,13 +107,10 @@ public class paikanVarausScreen {
 		
 		
 	}
-	
-	
-	
+
 	private class ButtonListener implements ActionListener{
   	    public void actionPerformed(ActionEvent e) {
   	    if(e.getSource() == confirmButton) {
-  	    	//TODO: aseta paikan muut ominaisuudet
   			for(int seat=0;seat<20;seat++){
   					if(boxList.get(seat).isSelected()){
   						rivi = (seat/10);

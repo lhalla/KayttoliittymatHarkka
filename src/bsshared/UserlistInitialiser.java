@@ -18,7 +18,7 @@ public class UserlistInitialiser
 	
 	public void createUsers()
 	{
-		users.add(new Admin());
+		users.add(new User("admin","admin"));
 		users.add(new User("bob","halibut"));
 		
 	}

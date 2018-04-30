@@ -23,8 +23,6 @@ public class ClientLoginPrompt extends JDialog implements ActionListener
 
     private final JLabel labelStatus = new JLabel(" ");
     
-    
-    
     private Client client;
 
     /**

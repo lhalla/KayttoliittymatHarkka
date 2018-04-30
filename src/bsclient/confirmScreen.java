@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class confirmScreen {
+public class ConfirmScreen {
 
 	private JLabel RouteText = new JLabel();
 	private JLabel PriceText = new JLabel();
@@ -29,7 +29,7 @@ public class confirmScreen {
 	ButtonListener buttonlistener = new ButtonListener();
 	
 	
-	public confirmScreen(Frame frame) {
+	public ConfirmScreen(Frame frame) {
 		dialog = new JDialog (frame, "Vahvista varaus");
 		dialog.setSize(500, 500);
 	}

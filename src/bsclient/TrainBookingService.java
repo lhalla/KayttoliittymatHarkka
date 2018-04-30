@@ -1,43 +1,30 @@
 package bsclient;
 
- 
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
 
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.*;
 import bsshared.*;
-import messages.*;
-
-import java.awt.EventQueue;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
- 
-
- 
 
 public class TrainBookingService {
 	
 	private User user;
 	
-	//List of trains and their properties
-	private ArrayList<Train> trainList = new ArrayList<Train>();
-	//the train/seat that user is currently trying to book
+	// List of trains and their properties.
+	private ArrayList<Train> trainList;
+	
+	// The train/seat that user is currently trying to book
 	private Train chosenTrain;
 	private TrainSeat chosenSeat;
 	
-	//cheks if user is admin
+	// Checks if the user is admin
 	private boolean isAdmin;
 	
 	private Client client;
@@ -47,24 +34,23 @@ public class TrainBookingService {
     private final int basewidth=200;
     private final int baseheight=200;
     
-    //boolean that tells if image is the main menu image or not
+    // Boolean that determines whether the image is the main menu image or not
     private boolean inSecondScreen=false;
     
     private ButtonListener bl;
     private ArrayList<JButton> ButtonList = new ArrayList<JButton>();
     private ArrayList<JLabel> TextList = new ArrayList<JLabel>();
-    private ArrayList<JComboBox> BoxList = new ArrayList<JComboBox>();
+    private ArrayList<JComboBox<String>> BoxList = new ArrayList<JComboBox<String>>();
     
-    //panels here
-    //!paneeleissa ei saa käyttää boxlayout
+    // JPanels.
     private JPanel leftPanel = new JPanel();
     private JPanel topPanel = new JPanel();
     private JPanel centerPanel = new JPanel();
     
-    //JLabel keskipaneelin kuvalle
+    // JLabel for the middle panel's image.
     private JLabel image = new JLabel();
 
-    //buttons here
+    // JButtons.
     private JButton varausButton = new JButton("VARAA");
     private JButton varaukseniButton = new JButton("VARAUKSENI");
     private JButton lompakkoButton = new JButton("LOMPAKKO");
@@ -89,15 +75,15 @@ public class TrainBookingService {
     private JButton buttonMuutaCCNumber = new JButton("MUUTA CCNum");
     private JButton buttonMuutaSalasana = new JButton("MUUTA Salasana");
     
-    private JButton addFunds5 = new JButton("Lis�� 5e");
-    private JButton addFunds25 = new JButton("Lis�� 25e");
-    private JButton addFunds100 = new JButton("Lis�� 100e");
+    private JButton addFunds5 = new JButton("Lisää 5e");
+    private JButton addFunds25 = new JButton("Lisää 25e");
+    private JButton addFunds100 = new JButton("Lisää 100e");
     
     private JButton hyvaksyVarausButton = new JButton("Hyvaksy");
     private JButton peruVarausButton = new JButton("Peru");
     
   	
-    //JComboBoxit junanvaraukselle/luomiselle/poistamiselle
+    // JComboBoxes for seat reservation.
     private JComboBox<String> paivamaaraBox1;
     private JComboBox<String> paivamaaraBox2;
     private JComboBox<String> reittiBox;
@@ -109,11 +95,9 @@ public class TrainBookingService {
     
     private JButton buttonTakaisin = new JButton("TAKAISIN");
     
-    //TODO: Pyyt�� parametriksi trainListin, korvaa makeCustomTrains metodi
     public TrainBookingService(JFrame frame)
     {
     	this.frame=frame;
- //   	this.user.copy(user);
     	
     	client = ((ClientGUI)frame).client;
     	
@@ -128,18 +112,14 @@ public class TrainBookingService {
     		isAdmin=false;
     	}
     	
-    	
-    	
     	client.fetchTrains();
-    	trainList = ((ClientGUI)frame).client.trainList;
-//    	makeCustomTrains();
+    	trainList = client.trainList;
    	}
+    
     /**
-	 * Makes the frame and layout for trainbookingservice.
-	 * no fixes needed, can be ignored.
+	 * Makes the frame and layout for TrainBookingService.
 	 */
     public JFrame makeWindow() {
-
     
     frame.getContentPane().setLayout(new BorderLayout());
     
@@ -149,33 +129,32 @@ public class TrainBookingService {
     frame.setSize(5*basewidth, 5*baseheight-baseheight/2);
     frame.setResizable(false);
 
-    //leftpanel
+    // Left panel.
     leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     leftPanel.setLayout(gridLeft);
     leftPanel.setMaximumSize(new Dimension(basewidth,4*baseheight));
     leftPanel.setMinimumSize(new Dimension(basewidth,4*baseheight));
 
-    //toppanel
+    // Top panel.
     topPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     topPanel.setLayout(gridTop);
     topPanel.setMaximumSize(new Dimension(5*basewidth,baseheight/2));
     topPanel.setMinimumSize(new Dimension(5*basewidth,baseheight/2));
 
-    //centerpanel
+    // Center panel.
     centerPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     centerPanel.setBackground(Color.WHITE);
     centerPanel.setLayout(gridMid);
     centerPanel.setMaximumSize(new Dimension(4*basewidth,4*baseheight));
     centerPanel.setMinimumSize(new Dimension(4*basewidth,4*baseheight));
     
-    //Button initialization
+    // Button initialization
   	bl = new ButtonListener();
                                 
-    //image
+    // image
     createImage("https://images.cdn.yle.fi/image/upload//w_1199,h_1307,f_auto,fl_lossy,q_auto/13-3-6716387.jpg");
-
     
-    //addbuttons and labels here
+    // add buttons and labels here
     centerPanel.add(image);
     makeButtonLP(varausButton);
     makeButtonLP(varaukseniButton);
@@ -192,7 +171,6 @@ public class TrainBookingService {
     }
     makeButtonTP(poistuButton);
     
-    
     frame.add(centerPanel, BorderLayout.CENTER);
     frame.add(topPanel, BorderLayout.NORTH);
     frame.add(leftPanel, BorderLayout.WEST);
@@ -202,8 +180,7 @@ public class TrainBookingService {
     }
     
     /**
-	 * Straches image for website X to fit JLable image
-	 * no fixes needed, can be ignored.
+	 * Stretches image for website X to fit JLabel image
 	 */
     private Image stretchImage(Image srcImg){
 		BufferedImage resizedImg = new BufferedImage(4*basewidth, 4*baseheight, BufferedImage.TYPE_INT_ARGB);
@@ -214,11 +191,8 @@ public class TrainBookingService {
 	    return resizedImg;
 	}
     
-    
     /**
-	 * these initialize the buttons or remove them
-	 * LP=left panel TP=top panel
-	 * no fixes needed, both can be ignored
+	 * Initialises or removes a button in the left panel.
 	 */
     private void makeButtonLP(JButton button){
     	button.setBackground(new Color(50, 200, 45));
@@ -232,6 +206,10 @@ public class TrainBookingService {
         leftPanel.add(button);
         button.setVisible(true);
     }
+    
+    /**
+	 * Initialises or removes a button in the top panel.
+	 */
     private void makeButtonTP(JButton button){
     	button.setBackground(new Color(50, 200, 45));
         button.setForeground(Color.WHITE);
@@ -242,72 +220,56 @@ public class TrainBookingService {
         topPanel.add(button);
         button.setVisible(true);
     }
+    
     /**
-	 * adds a jcombobox to left panel
-	 * no fixes needed, can be ignored.
+	 * Adds a JComboBox to left panel.
 	 */
     private void addBoxLP(JComboBox box){
     	leftPanel.add(box);
     	BoxList.add(box);
     }
-    /**
-	 * clears buttons from left panel
-	 * no fixes needed, can be ignored.
-	 */
     
+    /**
+	 * Clears buttons from left panel.
+	 */
     private void clearButtons(){
-		for(int i=0;i<ButtonList.size();i++){
+		for(int i=0; i<ButtonList.size(); i++){
 			ButtonList.get(i).setVisible(false);
-		}
-		for(int i=0;i<ButtonList.size();i++){
 			ButtonList.get(i).removeActionListener(bl);
-		}
-		for(int i=0;i<ButtonList.size();i++){
 			leftPanel.remove(ButtonList.get(i));
 		}
+		
 		ButtonList.clear();
 	}
+    
     /**
-	 * clears boxes from left panel
-	 * no fixes needed, can be ignored.
+	 * Clears boxes from left panel.
 	 */
     private void clearBoxes(){
-    	for(int x=0;x<BoxList.size();x++){
+    	for(int x=0; x<BoxList.size(); x++){
 			leftPanel.remove(BoxList.get(x));
 		}
+    	
 		BoxList.clear();
     }
+    
     /**
-	 * no fixes needed, can be ignored.
+	 * Creates an image object that is fetched from the given URL.
 	 */
     private void createImage(String URLforImage){
-    	try {
+    	try
+    	{
         	image.setIcon(new ImageIcon(stretchImage(new ImageIcon(new URL(URLforImage)).getImage())));
-        	}catch(Exception e) {}
+        }
+    	catch(Exception e) {}
     }
-    /**
-	 * no fixes needed, can be ignored.
-	 */
+    
     protected ArrayList<String> getVaraukset(){
     	return user.getVaraukset();
     }
     
-    //koravattava
-    private void makeCustomTrains(){
-    	trainList.add(new Train());
-    	trainList.add(new Train());
-    	trainList.add(new Train());
-    	trainList.get(0).setRoute("Helsinki", "Tampere", "7-12");
-    	trainList.get(0).setCost(11.5);
-    	trainList.get(1).setRoute("Turku", "Tampere", "10-12");
-    	trainList.get(0).setCost(8.5);
-    	trainList.get(2).setRoute("Helsinki", "Turku", "19-23");
-    	
-    }
-    
     /**
-     * displays users current bookings on screen
-	 * no fixes needed, can be ignored.
+     * Displays users current bookings on screen.
 	 */
     private void varauksetMetodi(){
     	centerPanel.remove(image);
@@ -321,9 +283,9 @@ public class TrainBookingService {
     	
     	centerPanel.setBackground(new Color(127,235,255));
     }
+    
     /**
-     * displays users current money on screen, and makes buttons for adding money to it
-	 * no fixes needed, can be ignored.
+     * Displays users current money on screen, and makes buttons for adding money to it
 	 */
     private void lompakkoMetodi(){
     	centerPanel.remove(image);
@@ -341,8 +303,7 @@ public class TrainBookingService {
     /**
      * Method that gives user the option to choose which route to take and when
      * adds accept route and cancel buttons to left panel
-     * this method uses jcomboboxes
-	 * no fixes needed, can be ignored.
+     * this method uses JComboBoxes
 	 */
     private void varausMetodi(){
     	//Comboboxit reittibox saavat arvonsa t�st�
@@ -364,9 +325,8 @@ public class TrainBookingService {
     
     
     /**
-     * removes all current jbuttons,jcomboboxes and JLabel text in centerpanel
+     * Removes all current JButtons,JComboBoxes and JLabel text in center panel
      * returns user to main menu after
-	 * no fixes needed, can be ignored.
 	 */
     private void removeTextAndButtonsAndReturn(){
     		clearButtons();
@@ -389,33 +349,30 @@ public class TrainBookingService {
     }
     
     /**
-     * after user has chosen the seat for a route, a confirmer screen is opened
-     * this method will check if user can afford the trainride and will ask if user is sure
-	 * no fixes needed, can be ignored.
+     * After user has chosen the seat for a route, a confirmation screen is opened
+     * this method will check if user can afford the train ride and will ask if user is sure
 	 */
     private boolean confirm(){
-    	confirmScreen confirmer = new confirmScreen(frame);
+    	ConfirmScreen confirmer = new ConfirmScreen(frame);
     	double price = calcPrice();
     	boolean canAfford = user.canAfford(price);
     	boolean confirm = confirmer.confirm((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() + (String) paivamaaraBox2.getSelectedItem() + "ta" + " Paikalla " + chosenSeat.getPaikka() , "Hinta: " + price + "e", canAfford);
     	return confirm;
     }
+    
     /**
-     * once user has pressed the button that chooses the route and time for train this will be run
+     * Once user has pressed the button that chooses the route and time for train this will be run
      * this opens up a new screen that will ask which seat would the user like
-     * after seat has been chosen, returns a trainseat object which tells bookingservice which seat user wishes to take
-	 * this method needs no fixes but paikanvarauscreen class requires a couple of tweaks, and hyväksyvarausbutton will update the user.varaukset value if confirmer returns true
+     * after seat has been chosen, returns a train seat object which tells booking service which seat user wishes to take
 	 */
     private TrainSeat varaaPaikka(){
-    	paikanVarausScreen paikanVaraaja = new paikanVarausScreen(frame,chosenTrain,user.getUsername());
+    	SeatReservationScreen paikanVaraaja = new SeatReservationScreen(frame,chosenTrain,user.getUsername());
     	TrainSeat varattuPaikka= paikanVaraaja.varaa();	
     	return varattuPaikka;
     }
     
-    
     /**
      * calculates the price of the train route that is being booked
-	 * no fixes needed, can be ignored.
 	 */
     private Double calcPrice(){	
     	return chosenTrain.getCost();
@@ -423,7 +380,6 @@ public class TrainBookingService {
     
     /**
      * returns the train object that user is trying to book
-	 * no fixes needed, can be ignored.
 	 */
     private Train getChosenTrain(){
     	String junaReitti= (String) reittiBox.getSelectedItem();
@@ -439,7 +395,6 @@ public class TrainBookingService {
     
     /**
      * makes Jcomboboxes for making new train routes
-	 * no fixes needed, can be ignored.
 	 */
     private void lisaaJunaBoxit(){
     		String[] junaNimi= new String[]{"A001","B001"};
@@ -457,9 +412,6 @@ public class TrainBookingService {
 	    	addBoxLP(junanLahtoAikaBox);
 	    	addBoxLP(junanHintaBox);
     }
-   
-    
-    
     
     /**
      * when a button is pressed, buttonlistener does something that is determined by the button
@@ -522,6 +474,8 @@ public class TrainBookingService {
 	    }
   	    if(e.getSource() == poistuButton) {
   	    	//logout
+  	    	client.logout();
+  	    	frame.dispose();
   	    	
 	    }
   	  	if(e.getSource() == infoButton) {
@@ -532,19 +486,14 @@ public class TrainBookingService {
 	    	
 	    	TextList.add(new JLabel());
 	    	TextList.add(new JLabel());
-	    	TextList.add(new JLabel());
 	    	TextList.get(0).setText("Train Booking Service versio 1.0");
 	    	TextList.get(0).setFont(new Font("Tahoma", Font.BOLD,12));
     		TextList.get(0).setForeground(Color.BLACK);
-    		TextList.get(1).setText("poistu näppäin on vielä epäkunnossa, poistu painamalla oikean yläkulman rastia");
+    		TextList.get(1).setText("Varauksissa siniset paikat ovat erikoispaikkoja esimerkiksi lemmikeille tai liikuntakyvyttömille");
 	    	TextList.get(1).setFont(new Font("Tahoma", Font.BOLD,12));
     		TextList.get(1).setForeground(Color.BLACK);
-    		TextList.get(2).setText("Varauksissa siniset paikat ovat erikoispaikkoja esimerkiksi lemmikeille tai liikuntakyvyttömille");
-	    	TextList.get(2).setFont(new Font("Tahoma", Font.BOLD,12));
-    		TextList.get(2).setForeground(Color.BLACK);
     		centerPanel.add(TextList.get(0));
     		centerPanel.add(TextList.get(1));
-    		centerPanel.add(TextList.get(2));
     		centerPanel.setBackground(new Color(127,235,255));
 	    	
 	    	makeButtonLP(buttonTakaisin);

@@ -1,7 +1,6 @@
 package bsserver;
 
 import bsshared.*;
-import messages.*;
 
 import java.io.*;
 import java.net.*;
@@ -87,8 +86,6 @@ public class Server
 			{
 				// Accept an incoming connection
 				Socket socket = serverSocket.accept();
-				
-				displayEvent("Beep!");
 				
 				// If the server has been turned off, break out of the loop.
 				if (!serverOn)
@@ -206,18 +203,6 @@ public class Server
 				break;
 			}
 		}
-		
-//		User updUser = new User();
-//		updUser.copy(uuMessage.getUser());
-//		
-//		res = users.add(updUser);
-//		
-//		if (!res) return res;
-//		
-//		while (true)
-//		{
-//			if (saveList(users,"users")) break;
-//		}
 		
 		return true;
 	}
