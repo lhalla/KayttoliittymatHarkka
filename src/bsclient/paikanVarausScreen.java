@@ -49,7 +49,9 @@ public class paikanVarausScreen {
 		trainseat=new TrainSeat();
 	}
 	//hyväksyvarausbutton johtaa tähän metodiin, ja siellä loppujen lopuksi päivitetään 
-	public TrainSeat varaa(){
+	public TrainSeat varaa(int date){
+		
+		
 		dialog.getContentPane().setLayout(new BorderLayout());
 		dialog.setModal (true);
 		dialog.setAlwaysOnTop (true);
@@ -69,18 +71,17 @@ public class paikanVarausScreen {
 		chooseSeatPanel.setPreferredSize(new Dimension(800,300));
 		dialog.add(chooseSeatPanel, BorderLayout.CENTER);
 		
-		//poista!!
-		train.seats[0][0]="remes";
+		
 		
 		//makes 20 seats to choose from
 		for(int seats=0;seats<20;seats++){
 			boxList.add(new JCheckBox());
 			if(seats==9 || seats==19)boxList.get(seats).setBackground(Color.blue);
-			if(train.seats[(seats%10)][seats/10] != null){
-				if(!train.seats[(seats%10)][seats/10].equals("")){
+			if(train.seats[(seats%10)][seats/10][date] != null){
+				if(!train.seats[(seats%10)][seats/10][date].equals("")){
 					boxList.get(seats).setBackground(Color.red);
 					boxList.get(seats).setForeground(Color.white);
-					boxList.get(seats).setText(train.seats[(seats%10)][seats/10]);
+					boxList.get(seats).setText(train.seats[(seats%10)][seats/10][date]);
 					boxList.get(seats).setEnabled(false);
 				}
 			}

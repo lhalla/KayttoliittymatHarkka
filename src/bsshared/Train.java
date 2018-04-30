@@ -8,19 +8,21 @@ public class Train implements Serializable
 	public boolean Available;
 	public double cost;
 	public String route;
-	public String[][] seats;
+	public String[][][] seats;
+
 
 	public Train() {
 		this.Available=true;
 		this.cost=5.0;
 		this.route="A001: Helsinki-Turku klo 8-10";
-		this.seats= new String[10][2];
+		this.seats= new String[10][2][372];
+
 	}
 	public Train(String route, double cost){
 		this.Available=true;
 		this.cost=5.0;
 		this.route=route;
-		this.seats= new String[10][2];
+		this.seats= new String[10][2][372];
 	}
 	
 	public boolean matchingReitti (String reitti){

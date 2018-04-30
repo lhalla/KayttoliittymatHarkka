@@ -6,6 +6,7 @@ package bsshared;
 public class TrainSeat {
 	public boolean paikkaOnOikeastiVarattu;
 	String paikka;
+	int date;
 	int row;
 	int column;
 	
@@ -34,6 +35,9 @@ public class TrainSeat {
 	public int getColumn(){
 		return column;
 	}
+	public int getDate(){
+		return date;
+	}
 
 	public void setPaikka(String paikka){
 		this.paikka=paikka;
@@ -43,5 +47,8 @@ public class TrainSeat {
 	}
 	public void setColumn(int column){
 		this.column=column;
+	}
+	public void setDate(int date){
+		this.date=date;
 	}
 }

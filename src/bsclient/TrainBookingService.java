@@ -33,10 +33,10 @@ public class TrainBookingService {
 	
 	//List of trains and their properties
 	private ArrayList<Train> trainList = new ArrayList<Train>();
-	//the train/seat that user is currently trying to book
+	//the train/seat/timeofbooking that user is currently trying to book
 	private Train chosenTrain;
 	private TrainSeat chosenSeat;
-	
+	private int date;
 	//cheks if user is admin
 	private boolean isAdmin;
 	
@@ -408,8 +408,19 @@ public class TrainBookingService {
 	 */
     private TrainSeat varaaPaikka(){
     	paikanVarausScreen paikanVaraaja = new paikanVarausScreen(frame,chosenTrain,user.getUsername());
-    	TrainSeat varattuPaikka= paikanVaraaja.varaa();	
+    	TrainSeat varattuPaikka= paikanVaraaja.varaa(dateToInt());	
     	return varattuPaikka;
+    }
+    
+    private int dateToInt(){
+    	StringBuilder sb = new StringBuilder();
+    	sb.append((String) paivamaaraBox1.getSelectedItem());
+    	sb.setLength(sb.length()-1);
+    	int a = Integer.valueOf(sb.toString());
+    	sb.setLength(0);
+    	int b = paivamaaraBox2.getSelectedIndex();
+    	
+    	return a+(b-1)*12;
     }
     
     
@@ -599,7 +610,7 @@ public class TrainBookingService {
   	    		if(confirm()){
   	    			user.removeMoney(calcPrice());
   	    			user.setVaraus((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() +  " " + (String) paivamaaraBox2.getSelectedItem() + "ta" + " Paikka: " + chosenSeat.getPaikka());
-  	    			chosenTrain.seats[chosenSeat.getColumn()][chosenSeat.getRow()]=user.getUsername();
+  	    			chosenTrain.seats[chosenSeat.getColumn()][chosenSeat.getRow()][chosenSeat.getDate()]=user.getUsername();
   	    			removeTextAndButtonsAndReturn();
   	    		}
   	    	}
