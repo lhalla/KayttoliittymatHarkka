@@ -33,8 +33,9 @@ public class TrainBookingService {
 	
 	//List of trains and their properties
 	private ArrayList<Train> trainList = new ArrayList<Train>();
-	//the train that user is currently trying to book
+	//the train/seat that user is currently trying to book
 	private Train chosenTrain;
+	private TrainSeat chosenSeat;
 	
 	//cheks if user is admin
 	private boolean isAdmin;
@@ -312,7 +313,7 @@ public class TrainBookingService {
     	centerPanel.remove(image);
     	for(int i=0;i<user.getVaraukset().size();i++){
     		TextList.add(new JLabel());
-    		TextList.get(i).setText("                                                                      " + user.getVaraukset().get(i));
+    		TextList.get(i).setText("                                                            " + user.getVaraukset().get(i));
     		TextList.get(i).setFont(new Font("Tahoma", Font.BOLD,14));
     		TextList.get(i).setForeground(Color.BLACK);
     		centerPanel.add(TextList.get(i));
@@ -396,7 +397,7 @@ public class TrainBookingService {
     	confirmScreen confirmer = new confirmScreen(frame);
     	double price = calcPrice();
     	boolean canAfford = user.canAfford(price);
-    	boolean confirm = confirmer.confirm((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() + (String) paivamaaraBox2.getSelectedItem() + "ta", "Hinta: " + price + "e", canAfford);
+    	boolean confirm = confirmer.confirm((String) reittiBox.getSelectedItem() + " " + (String) paivamaaraBox1.getSelectedItem() + (String) paivamaaraBox2.getSelectedItem() + "ta" + " Paikalla " + chosenSeat.getPaikka() , "Hinta: " + price + "e", canAfford);
     	return confirm;
     }
     /**
@@ -580,7 +581,7 @@ public class TrainBookingService {
   	    
   	    if(e.getSource() == hyvaksyVarausButton) {
   	    	chosenTrain=getChosenTrain();
-  	    	TrainSeat chosenSeat = varaaPaikka();
+  	    	chosenSeat = varaaPaikka();
   	    	if(chosenSeat.paikkaOnOikeastiVarattu()){
   	    		if(confirm()){
   	    			user.removeMoney(calcPrice());
